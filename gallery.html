@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault Gallery 📸🎥</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="vault-body">
+    <div class="hearts-container">
+        <div class="heart">💖</div><div class="heart">❤️</div><div class="heart">💕</div>
+    </div>
+
+    <div class="dashboard" style="flex-direction: column; height: auto;">
+        <!-- Header -->
+        <div class="glass-panel" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px;">
+            <h2 id="galleryTitle">Memories Vault ✨</h2>
+            <button class="cute-btn" onclick="window.location.href='vault.html'" style="width: auto; padding: 10px 20px; margin-top:0;">⬅ Back</button>
+        </div>
+
+        <!-- ADMIN POWER PANEL -->
+        <div id="adminUploadSection" class="glass-panel" style="display: none; width: 100%; margin-bottom: 20px; text-align: center;">
+            <h3 style="margin-bottom: 15px;">Admin Control: Upload Photo or Video 📤</h3>
+            <!-- UPDATE: accept dono allow karega ab -->
+            <input type="file" id="photoInput" accept="image/*,video/*" style="margin-bottom: 10px;">
+            <br>
+            <button id="uploadBtn" class="cute-btn" style="width: auto; padding: 10px 30px;">Upload File</button>
+        </div>
+
+        <!-- Photos & Videos Render Layout -->
+        <div class="album-grid" id="photoGrid" style="width: 100%;"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, doc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDgt_FpIn3fqUsSJGe7L7gr4wApPZEdMos",
+            authDomain: "yourvault-f650c.firebaseapp.com",
+            projectId: "yourvault-f650c",
+            storageBucket: "yourvault-f650c.firebasestorage.app",
+            messagingSenderId: "777606101043",
+            appId: "1:777606101043:web:33e47a67decdf40c224b46"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentFolder = urlParams.get('folder') || 'friends';
+        
+        document.getElementById("galleryTitle").innerText = currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1) + "'s Gallery ✨";
+
+        const loggedInUser = localStorage.getItem("vaultUser") || "guest";
+        const displayName = loggedInUser.charAt(0).toUpperCase() + loggedInUser.slice(1);
+        
+        if (loggedInUser === "chinmay") {
+            document.getElementById("adminUploadSection").style.display = "block";
+        }
+
+        const uploadBtn = document.getElementById("uploadBtn");
+        const photoInput = document.getElementById("photoInput");
+
+        uploadBtn.addEventListener("click", async () => {
+            const file = photoInput.files[0];
+            if (!file) { alert("Pehle ek file select karo bro!"); return; }
+
+            // UPDATE: Check agar file video hai ya image
+            const mediaType = file.type.startsWith("video/") ? "video" : "image";
+
+            uploadBtn.innerText = "Uploading...";
+            try {
+                const storageRef = ref(storage, `vault_media/${Date.now()}_${file.name}`);
+                const snapshot = await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(snapshot.ref);
+
+                await addDoc(collection(db, "photos"), {
+                    url: downloadURL,
+                    folder: currentFolder,
+                    mediaType: mediaType, // Database mein track karega type
+                    timestamp: Date.now(),
+                    likes: 0, 
+                    comments: [] 
+                });
+
+                alert("Memory uploaded perfectly! 🎉");
+                photoInput.value = "";
+            } catch (err) {
+                console.error(err);
+                alert("Upload fail hua.");
+            }
+            uploadBtn.innerText = "Upload File";
+        });
+
+        const photoGrid = document.getElementById("photoGrid");
+        const q = query(collection(db, "photos"), where("folder", "==", currentFolder));
+        
+        onSnapshot(q, (snapshot) => {
+            photoGrid.innerHTML = "";
+            if(snapshot.empty) {
+                photoGrid.innerHTML = "<p style='color:#666; text-align:center; width:100%;'>Abhi yahan koi memory nahi hai.</p>";
+            }
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const docId = docSnap.id;
+                
+                const likesCount = data.likes || 0;
+                const commentsArray = data.comments || [];
+
+                let commentsHTML = "";
+                commentsArray.forEach(c => {
+                    commentsHTML += `<div style="font-size:12px; text-align:left; background:#f4f4f4; padding:6px; border-radius:8px; margin-bottom:4px;">
+                        <b style="color:#ff9a9e;">${c.sender}:</b> ${c.text}
+                    </div>`;
+                });
+
+                // UPDATE: Photo ya Video ka logic
+                let mediaElement = "";
+                if (data.mediaType === "video") {
+                    mediaElement = `<video src="${data.url}" controls style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; background: #000;"></video>`;
+                } else {
+                    mediaElement = `<img src="${data.url}" alt="Memory">`;
+                }
+
+                const card = document.createElement("div");
+                card.className = "photo-card";
+                card.innerHTML = `
+                    ${mediaElement}
+                    
+                    <div style="display:flex; justify-content:space-between; gap:10px; margin-bottom:10px;">
+                        <button class="cute-btn like-btn" data-id="${docId}" style="flex:1; padding:8px; font-size:13px; margin:0;">❤️ ${likesCount}</button>
+                        <a href="${data.url}" target="_blank" download="vault_media" style="flex:1;">
+                            <button class="cute-btn" style="width:100%; padding:8px; font-size:13px; margin:0;">💾 Save</button>
+                        </a>
+                    </div>
+
+                    <div style="max-height: 80px; overflow-y: auto; margin-bottom: 8px;">
+                        ${commentsHTML}
+                    </div>
+                    
+                    <div style="display:flex; gap:5px;">
+                        <input type="text" id="comment-${docId}" placeholder="Comment..." style="flex:1; padding:6px 10px; border-radius:15px; border:1px solid #ddd; outline:none; font-size:12px;">
+                        <button class="cute-btn comment-btn" data-id="${docId}" style="padding:6px 12px; margin:0; width:auto; font-size:12px;">Send</button>
+                    </div>
+                `;
+                photoGrid.appendChild(card);
+            });
+        });
+
+        photoGrid.addEventListener("click", async (e) => {
+            if (e.target.classList.contains("like-btn")) {
+                const docId = e.target.getAttribute("data-id");
+                await updateDoc(doc(db, "photos", docId), {
+                    likes: increment(1)
+                });
+            }
+            
+            if (e.target.classList.contains("comment-btn")) {
+                const docId = e.target.getAttribute("data-id");
+                const inputField = document.getElementById(`comment-${docId}`);
+                const text = inputField.value.trim();
+                
+                if (text !== "") {
+                    await updateDoc(doc(db, "photos", docId), {
+                        comments: arrayUnion({
+                            sender: displayName,
+                            text: text,
+                            timestamp: Date.now()
+                        })
+                    });
+
+                    if (loggedInUser !== "chinmay") {
+                        await addDoc(collection(db, "notifications"), {
+                            message: `<b>${displayName}</b> ne memory par comment kiya: "${text}"`,
+                            timestamp: Date.now()
+                        });
+                    }
+
+                    inputField.value = ""; 
+                }
+            }
+        });
+    </script>
+</body>
+</html>
