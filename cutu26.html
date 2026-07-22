@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Behena 🎂💖</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 50%, #f3e5ab 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #4a4a4a;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        /* --- 1. INTRO SCREEN --- */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffb6c1, #ffc0cb, #e6e6fa);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOutScreen 4.5s forwards;
+            pointer-events: none;
+        }
+
+        .elegant-title {
+            font-size: 3rem;
+            font-weight: 300;
+            color: #fff;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            text-shadow: 0 4px 15px rgba(218, 112, 214, 0.4);
+            opacity: 0;
+            animation: fadeInOutText 4s forwards;
+        }
+
+        @keyframes fadeInOutText {
+            0% { opacity: 0; transform: scale(0.9); filter: blur(5px); }
+            30% { opacity: 1; transform: scale(1); filter: blur(0); }
+            70% { opacity: 1; transform: scale(1); filter: blur(0); }
+            100% { opacity: 0; transform: scale(1.05); filter: blur(8px); }
+        }
+
+        @keyframes fadeOutScreen {
+            80% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* --- 2. PENGUINS & HEARTS --- */
+        .side-animation {
+            position: fixed;
+            top: 0;
+            width: 120px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .left-side { left: 10px; }
+        .right-side { right: 10px; }
+
+        .penguin-container {
+            font-size: 40px;
+            position: relative;
+            animation: bounce 2s infinite alternate ease-in-out;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: floatHeartUp 3s infinite linear;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-15px); }
+        }
+
+        @keyframes floatHeartUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
+        }
+
+        /* --- MAIN WRAPPER & GLASS CARDS --- */
+        .main-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.3), inset 0 0 0 1px rgba(255,255,255,0.7);
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* --- 3. FIRST CARD (Round) --- */
+        .flip-card {
+            background-color: transparent;
+            width: 260px;
+            height: 260px;
+            margin: 30px auto;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            border: 5px solid #ffb6c1;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
+        }
+
+        .flip-card-front img { width: 100%; height: 100%; object-fit: cover; }
+
+        .flip-card-back {
+            background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
+            color: #4a4a4a;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .cute-btn {
+            background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .cute-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(244, 63, 94, 0.5);
+        }
+
+        /* --- 4. COLLAGE SECTION --- */
+        .collage-section {
+            position: relative;
+            height: 400px;
+            margin: 40px 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.02);
+        }
+
+        .collage-img {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            opacity: 0.2;
+            animation: randomFade 6s infinite ease-in-out;
+        }
+
+        .img-1 { top: 15%; left: 10%; animation-delay: 0s; }
+        .img-2 { top: 10%; right: 12%; animation-delay: 1.5s; }
+        .img-3 { bottom: 15%; left: 8%; animation-delay: 3s; }
+        .img-4 { bottom: 12%; right: 10%; animation-delay: 4.5s; }
+
+        @keyframes randomFade {
+            0%, 100% { opacity: 0.1; transform: scale(0.95); }
+            50% { opacity: 0.9; transform: scale(1.05); }
+        }
+
+        .center-action { position: relative; z-index: 20; }
+
+        /* --- 5. BADA FLIP CARD --- */
+        .secret-panel {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .large-flip-card {
+            background-color: transparent;
+            width: 320px;
+            height: 460px;
+            margin: 30px auto;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .large-flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .large-flip-card.flipped .large-flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .large-card-front, .large-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            border: 5px solid #ffb6c1;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
+        }
+
+        .large-card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .large-card-back {
+            background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
+            color: #4a4a4a;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            text-align: left;
+            overflow-y: auto; 
+        }
+
+        .large-card-back h3 { color: #db7093; margin-bottom: 12px; font-size: 1.4rem; text-align: center;}
+        .large-card-back p { font-size: 1rem; line-height: 1.7; font-weight: 500; margin-bottom: 12px; }
+
+        /* --- 6. COMMENT SECTION --- */
+        .comment-section { text-align: left; }
+        .comment-input {
+            width: 100%; height: 100px; padding: 15px; border-radius: 16px;
+            border: 2px solid #ffb6c1; outline: none; resize: none;
+            background: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 15px;
+        }
+        .comment-input:focus { border-color: #ff69b4; box-shadow: 0 0 10px rgba(255, 105, 180, 0.2); }
+        .reviews-display { margin-top: 20px; max-height: 200px; overflow-y: auto; }
+        .review-item {
+            background: white; padding: 10px 15px; border-radius: 12px;
+            margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); font-size: 13px;
+        }
+        .nav-btn {
+            position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.5);
+            border: 1px solid rgba(255,255,255,0.8); padding: 6px 15px; border-radius: 15px;
+            cursor: pointer; font-size: 12px; font-weight: bold; z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. INTRO SCREEN -->
+    <div class="intro-overlay">
+        <h1 class="elegant-title">Happy Birthday Behena... ✨</h1>
+    </div>
+
+    <!-- 2. PENGUINS & HEARTS -->
+    <div class="side-animation left-side">
+        <div class="penguin-container">🐧<div class="floating-heart" style="animation-delay: 0s;">💖</div></div>
+        <div class="penguin-container" style="animation-delay: 0.5s;">🐧<div class="floating-heart" style="animation-delay: 1s;">❤️</div></div>
+    </div>
+    <div class="side-animation right-side">
+        <div class="penguin-container">🐧<div class="floating-heart" style="animation-delay: 0.3s;">💕</div></div>
+        <div class="penguin-container" style="animation-delay: 0.8s;">🐧<div class="floating-heart" style="animation-delay: 1.5s;">💗</div></div>
+    </div>
+
+    <button class="nav-btn" onclick="window.location.href='vault.html'">⬅ Back</button>
+
+    <div class="main-wrapper">
+        
+        <!-- ROUND INITIAL SURPRISE CARD -->
+        <div class="glass-card">
+            <h1 style="color: #db7093; font-weight: 600;">Suman's Day ✨</h1>
+            <p style="font-size: 14px; color: #888; margin-top: 5px;">Click the card to open the first surprise</p>
+
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <!-- YAHAN AAYI TERI PEHLI PHOTO -->
+                        <img src="IMG_0239.jpg" alt="Suman Front">
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Happy Birthday! 🎂</h3>
+                        <p>To the most incredible sister. May this year bring you endless laughs and fulfillment! Let's make every moment memorable. ✨</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLLAGE SECTION WITH CUSTOM PHOTOS -->
+        <div class="collage-section">
+            <img src="IMG_0232.jpg" class="collage-img img-1" alt="Memory 1">
+            <img src="IMG_0233.jpg" class="collage-img img-2" alt="Memory 2">
+            <img src="IMG_0234.jpg" class="collage-img img-3" alt="Memory 3">
+            <img src="IMG_0235.jpg" class="collage-img img-4" alt="Memory 4">
+
+            <div class="center-action">
+                <button class="cute-btn" onclick="revealSecretPanel()" id="masterActionBtn">Click Me 🌸</button>
+            </div>
+        </div>
+
+        <!-- REVEALED SECTION: BADA DYNAMIC FLIP CARD -->
+        <div id="secretMessagePanel" class="secret-panel">
+            <div class="glass-card" style="border: 2px dashed #ffb6c1;">
+                <h2 style="color: #ff69b4; margin-bottom: 5px;">The Ultimate Message 💌</h2>
+                <p style="font-size: 13px; color: #777; margin-bottom: 15px;">Tap the card below to read my letter!</p>
+                
+                <div class="large-flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="large-flip-card-inner">
+                        
+                        <!-- FRONT VIEW: YAHAN AAYI BADI FLIP CARD KI PHOTO -->
+                        <div class="large-card-front">
+                            <img src="IMG_0237.jpg" alt="Custom Birthday Pic">
+                        </div>
+                        
+                        <!-- BACK VIEW: TERA LAMBA MESSAGE -->
+                        <div class="large-card-back">
+                            <h3>From Chinmay 🤗</h3>
+                            <br>
+                            <p>Dearest Suman,</p>
+                            <p>You are not just my sister, you are my ultimate crime partner! Thank you for always saving me from all the blunders.</p>
+                            <p>Chahe hum kitna bhi ladhein, at the end of the day, I know you always have my back. This year is going to be super special for you, and I can't wait to see you achieve everything you want.</p>
+                            <p>Remember that trip we took? Or the times we stayed up late talking? Those are the memories I'm storing in this vault forever. Let's make 2026 epic, full of joy, and less of me annoying you (maybe)!</p>
+                            <p>Enjoy your day to the absolute fullest because you deserve the world! Happy Birthday Behena! 💖✨</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REVIEWS/COMMENTS -->
+        <div class="glass-card comment-section">
+            <h3 style="color: #db7093; text-align: center; margin-bottom: 15px;">Leave Your Birthday Review/Wish 💬</h3>
+            <textarea id="reviewText" class="comment-input" placeholder="Write something sweet about this page..."></textarea>
+            <center>
+                <button class="cute-btn" onclick="submitReview()" style="margin-top: 0; padding: 10px 30px; font-size: 14px;">Submit Review 💌</button>
+            </center>
+            
+            <div class="reviews-display" id="reviewsContainer"></div>
+        </div>
+
+    </div>
+
+    <script>
+        setTimeout(() => {
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        }, 4000);
+
+        function revealSecretPanel() {
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+            document.getElementById("secretMessagePanel").style.display = "block";
+            document.getElementById("masterActionBtn").innerText = "Unlocked! ✨";
+            setTimeout(() => {
+                document.getElementById("secretMessagePanel").scrollIntoView({ behavior: 'smooth' });
+            }, 200);
+        }
+
+        function submitReview() {
+            const input = document.getElementById("reviewText");
+            const text = input.value.trim();
+            if(text === "") { alert("Kuch to likho behena!"); return; }
+
+            let reviews = JSON.parse(localStorage.getItem("sumanReviews")) || [];
+            reviews.push({ text: text, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            localStorage.setItem("sumanReviews", JSON.stringify(reviews));
+            
+            input.value = "";
+            loadReviews();
+            confetti({ particleCount: 50, spread: 40 });
+        }
+
+        function loadReviews() {
+            const container = document.getElementById("reviewsContainer");
+            let reviews = JSON.parse(localStorage.getItem("sumanReviews")) || [];
+            if(reviews.length === 0) {
+                container.innerHTML = "<p style='color:#999; text-align:center; font-size:12px;'>Abhi tak koi review nahi aaya hai.</p>";
+                return;
+            }
+            container.innerHTML = reviews.map(r => `
+                <div class="review-item">
+                    <span style="color:#ff69b4; font-weight:bold;">Suman:</span> ${r.text} 
+                    <span style="float:right; font-size:10px; color:#aaa;">${r.time}</span>
+                </div>
+            `).join('');
+        }
+        window.addEventListener("DOMContentLoaded", loadReviews);
+    </script>
+</body>
+</html>
