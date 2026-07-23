@@ -65,8 +65,15 @@
             position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden;
             border-radius: 50%; border: 5px solid #ffb6c1; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
         }
-        .flip-card-front { z-index: 2; }
-        .flip-card-front img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* GOL PHOTO KA BACKGROUND TRICK */
+        .flip-card-front { 
+            z-index: 2; 
+            background-image: url('IMG_0239.jpeg'); 
+            background-size: cover; 
+            background-position: center; 
+        }
+        
         .flip-card-back { background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%); transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; z-index: 1; }
 
         .cute-btn { background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%); color: white; border: none; padding: 14px 35px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3); transition: all 0.3s; margin-top: 15px; }
@@ -79,7 +86,7 @@
         @keyframes randomFade { 0%, 100% { opacity: 0.1; transform: scale(0.95); } 50% { opacity: 0.9; transform: scale(1.05); } }
         .center-action { position: relative; z-index: 20; }
 
-        /* --- 5. BADA CARD (THE FAKE 2D FLIP - 100% SAFARI PROOF) --- */
+        /* --- 5. BADA CARD (THE FAKE 2D FLIP - BACKGROUND IMAGE FIX) --- */
         .secret-panel { display: none; margin-top: 20px; animation: fadeIn 1s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -87,22 +94,21 @@
         
         .safari-face {
             width: 100%; height: 100%; position: absolute; top: 0; left: 0;
-            border-radius: 24px; border: 5px solid #ffb6c1; overflow: hidden;
+            border-radius: 24px; border: 5px solid #ffb6c1; 
             box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
             transition: transform 0.3s ease-in-out; 
-            
-            /* -- YEH HAI SAFARI IMAGE CORNER FIX -- */
             -webkit-mask-image: -webkit-radial-gradient(white, black);
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
         }
 
-        /* Front Face (Photo) */
-        .safari-front { background: white; cursor: pointer; }
-        .safari-front img { 
-            width: 100%; height: 100%; object-fit: cover; display: block; 
-            border-radius: 19px; /* Inner border mask */
+        /* BADI PHOTO KA BACKGROUND TRICK */
+        .safari-front { 
+            background-color: white; 
+            cursor: pointer; 
+            background-image: url('IMG_0237.PNG'); 
+            background-size: cover; 
+            background-position: center; 
         }
+        
         .tap-hint { position: absolute; bottom: 15px; left: 0; width: 100%; text-align: center; color: white; font-weight: bold; text-shadow: 0px 2px 5px rgba(0,0,0,0.8); font-size: 15px; pointer-events: none; }
 
         /* Back Face (Text) */
@@ -144,7 +150,9 @@
 
             <div class="flip-card" onclick="this.classList.toggle('flipped')">
                 <div class="flip-card-inner">
-                    <div class="flip-card-front"><img src="IMG_0239.jpeg" alt="Suman Front"></div>
+                    <!-- GOL PHOTO BINA IMG TAG KE -->
+                    <div class="flip-card-front"></div>
+                    
                     <div class="flip-card-back">
                         <h3>Happy Birthday! 🎂</h3>
                         <p>To the most incredible sister. May this year bring you endless laughs and fulfillment! Let's make every moment memorable. ✨</p>
@@ -168,9 +176,8 @@
                 
                 <div class="safari-safe-container">
                     
-                    <!-- FRONT (PHOTO) -->
+                    <!-- FRONT BADI PHOTO BINA IMG TAG KE -->
                     <div id="frontFace" class="safari-face safari-front" onclick="doFakeFlip('back')">
-                        <img src="IMG_0237.PNG" alt="Custom Birthday Pic">
                         <div class="tap-hint">Tap to open 💌</div>
                     </div>
                     
