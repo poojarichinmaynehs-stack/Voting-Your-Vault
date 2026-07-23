@@ -1,0 +1,153 @@
+/* ===== GLOBAL RESET ===== */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;   /* LEFT-RIGHT SCROLL KILL */
+  font-family: 'Poppins', sans-serif;
+  background-color: #ffdde7;
+  color: #4A4A4A;
+  text-align: center;
+}
+
+/* MAIN SITE - Ab seedha dikhega */
+#main-site {
+  display: block;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 20px;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #ffd3e0, #f683a9);
+}
+
+.hero-center {
+  flex: 1;
+}
+
+.hero p {
+  font-size: 1.1rem;
+}
+
+/* ===== IMAGES ===== */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+
+.curve-img {
+  max-width: 420px;
+  border-radius: 30px;
+  margin-top: 30px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* ===== SIDES ===== */
+.side {
+  width: 180px;
+  display: flex;
+}
+
+.left {
+  justify-content: flex-start;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.gif {
+  width: 140px;
+  opacity: 0.9;
+}
+
+/* ===== GIF ROW ===== */
+.birthday-gifs {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+/* ===== MESSAGE ===== */
+section {
+  padding: 60px 20px;
+}
+
+.message h2 {
+  font-family: 'Playfair Display', serif;
+  color: #ff6da0;
+}
+
+/* ===== SECTION 3 ===== */
+.section-3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 20px;
+  background: #fff;
+}
+
+.section-center {
+  flex: 1;
+}
+
+.section-center h2 {
+  font-family: 'Playfair Display', serif;
+  color: #f9bbd1;
+  font-size: 2rem;
+}
+
+.section-center p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 20px;
+  background: #ffd3e0;
+  font-size: 0.9rem;
+}
+
+/* ===== MOBILE FIX (FINAL WEAPON) ===== */
+@media (max-width: 768px) {
+
+  .hero,
+  .section-3 {
+    flex-direction: column;
+  }
+
+  .side {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .gif {
+    width: 120px;
+  }
+
+  .curve-img {
+    max-width: 90%;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+}
