@@ -3,136 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    
-    <title>Suman's Secret Vault 💖</title>
-    
+    <title>Inside The Vault ✨</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 50%, #f3e5ab 100%); min-height: 100vh; color: #4a4a4a; padding: 20px; padding-bottom: 80px; }
-        
-        .header { text-align: center; margin-bottom: 30px; margin-top: 20px; }
-        .header h1 { color: #db7093; font-size: 2.5rem; text-shadow: 0 2px 10px rgba(219, 112, 147, 0.2); }
-        .header p { color: #888; font-size: 14px; margin-top: 5px; font-weight: 500;}
-
-        .upload-card { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 24px; padding: 25px; box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3); max-width: 500px; margin: 0 auto 40px auto; text-align: center; }
-        
-        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; margin-bottom: 15px; }
-        .file-input-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; }
-        .btn { background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%); color: white; border: none; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3); transition: all 0.3s; display: inline-block; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(244, 63, 94, 0.5); }
-        
-        #loadingMsg { display: none; color: #ff69b4; font-weight: bold; margin-top: 10px; font-size: 14px; animation: pulse 1s infinite alternate; }
-        @keyframes pulse { from { opacity: 0.6; } to { opacity: 1; } }
-
-        /* CLOUD GALLERY GRID */
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; max-width: 800px; margin: 0 auto; }
-        .gallery-item { position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 3px solid white; background: white; aspect-ratio: 1 / 1; animation: popIn 0.5s ease-out forwards; cursor: pointer; }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
-        .gallery-item:hover img { transform: scale(1.05); }
-        
-        .delete-btn { position: absolute; top: 5px; right: 5px; background: rgba(255,0,0,0.8); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        
-        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
-        .nav-btn { position: fixed; top: 20px; left: 20px; background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.8); padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .options-panel {
+            display: none;
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+        .option-btn {
+            padding: 8px 15px;
+            font-size: 13px;
+            margin: 5px;
+            width: calc(50% - 10px);
+            display: inline-block;
+        }
+        .year-tag {
+            background: #ff9a9e;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
-<body>
-
-    <button class="nav-btn" onclick="window.location.href='cutu26.html'">⬅ Back to Gift</button>
-
-    <div class="header">
-        <h1>Cloud Vault ☁️🌸</h1>
-        <p>Live Connected to ImgBB Server</p>
+<body class="vault-body">
+    <div class="hearts-container">
+        <div class="heart">💖</div><div class="heart">❤️</div><div class="heart">💕</div>
     </div>
 
-    <!-- UPLOAD SECTION -->
-    <div class="upload-card">
-        <h3 style="color: #db7093; margin-bottom: 15px;">Add a new cloud memory ✨</h3>
-        <div class="file-input-wrapper">
-            <button class="btn">Select & Upload Photo 🚀</button>
-            <input type="file" id="imageInput" accept="image/jpeg, image/png, image/jpg" onchange="uploadToCloud()">
-        </div>
-        <p id="loadingMsg">Uploading to Cloud Database... Please wait ☁️⏳</p>
-    </div>
-
-    <!-- GALLERY SECTION -->
-    <div class="gallery-grid" id="galleryContainer"></div>
-
-    <script>
-        // TERI SECRET CLOUD API KEY
-        const IMGBB_API_KEY = "E59dffa4691f853680e4c3efc19b2703";
-
-        window.addEventListener('DOMContentLoaded', loadGallery);
-
-        function uploadToCloud() {
-            const input = document.getElementById('imageInput');
-            const loadingMsg = document.getElementById('loadingMsg');
+    <div class="dashboard" style="flex-direction: column;">
+        
+        <!-- TOP HEADER & NOTIFICATION BELL -->
+        <div class="glass-panel" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; padding: 15px 25px;">
+            <h2 style="margin: 0; color: #333;">Dashboard ✨</h2>
             
-            if (!input.files || input.files.length === 0) return;
-            
-            const file = input.files[0];
-            loadingMsg.style.display = "block"; // Loader on
-            
-            // Preparing data for ImgBB Cloud
-            const formData = new FormData();
-            formData.append("image", file);
-            
-            // Fetch Request to Cloud API
-            fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success) {
-                    const cloudImageUrl = data.data.display_url;
-                    saveToMemory(cloudImageUrl);
-                    loadingMsg.style.display = "none";
-                    input.value = ""; // Reset input
-                } else {
-                    alert("Cloud Upload Failed! Try again.");
-                    loadingMsg.style.display = "none";
-                }
-            })
-            .catch(error => {
-                alert("Internet connection error.");
-                loadingMsg.style.display = "none";
-            });
-        }
-
-        function saveToMemory(cloudUrl) {
-            let cloudVault = JSON.parse(localStorage.getItem('sumanCloudVault')) || [];
-            // Push naya image link sabse upar
-            cloudVault.unshift(cloudUrl);
-            localStorage.setItem('sumanCloudVault', JSON.stringify(cloudVault));
-            loadGallery(); 
-        }
-
-        function loadGallery() {
-            const container = document.getElementById('galleryContainer');
-            let cloudVault = JSON.parse(localStorage.getItem('sumanCloudVault')) || [];
-
-            if (cloudVault.length === 0) {
-                container.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#999; font-weight: bold;'>Vault is empty. Upload your first photo to the cloud! ☁️</p>";
-                return;
-            }
-
-            container.innerHTML = cloudVault.map((imgLink, index) => `
-                <div class="gallery-item">
-                    <img src="${imgLink}" alt="Cloud Memory">
-                    <button class="delete-btn" onclick="deletePhoto(${index})">✖</button>
+            <div style="position: relative; cursor: pointer;" onclick="toggleNotifs()">
+                <div style="font-size: 26px;">🔔</div>
+                <div id="notifBadge" style="background: #ff4757; color: white; border-radius: 50%; padding: 2px 6px; font-size: 11px; font-weight: bold; position: absolute; top: -2px; right: -5px; display: none;">0</div>
+                
+                <div id="notifDropdown" class="glass-panel" style="display: none; position: absolute; right: 0; top: 45px; width: 300px; max-height: 250px; overflow-y: auto; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 15px;">
+                    <h4 style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; color: #333;">Recent Activity</h4>
+                    <div id="notifList" style="font-size: 13px; color: #555; text-align: left;">
+                        Koi nayi activity nahi hai.
+                    </div>
                 </div>
-            `).join('');
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT AREA -->
+        <div style="display: flex; gap: 20px; width: 100%; flex: 1;">
+            
+            <!-- LEFT: Dynamic Folders with Admin Master Control -->
+            <div class="gallery-section glass-panel">
+                <h2>Memories Vault 📸</h2>
+                <div class="album-grid" id="folderGrid">
+                    <!-- JavaScript handles secure rendering here -->
+                </div>
+            </div>
+
+            <!-- RIGHT: Live Chat -->
+            <div class="chat-section glass-panel">
+                <h2>Live Chat 💬</h2>
+                <div class="chat-box" id="chatBox"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="messageInput" placeholder="Type a message...">
+                    <button class="cute-btn send-btn">Send</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDgt_FpIn3fqUsSJGe7L7gr4wApPZEdMos",
+            authDomain: "yourvault-f650c.firebaseapp.com",
+            projectId: "yourvault-f650c",
+            storageBucket: "yourvault-f650c.firebasestorage.app",
+            messagingSenderId: "777606101043",
+            appId: "1:777606101043:web:33e47a67decdf40c224b46"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const loggedInUser = localStorage.getItem("vaultUser") || "guest";
+        const displayName = loggedInUser.charAt(0).toUpperCase() + loggedInUser.slice(1);
+
+        window.toggleNotifs = () => {
+            const dropdown = document.getElementById("notifDropdown");
+            dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+        };
+
+        window.toggleBdayOptions = () => {
+            const panel = document.getElementById("bdayOptionsPanel");
+            panel.style.display = panel.style.display === "none" ? "block" : "none";
+        };
+
+        const notifBadge = document.getElementById("notifBadge");
+        const notifList = document.getElementById("notifList");
+        const notifQuery = query(collection(db, "notifications"), orderBy("timestamp", "desc"));
+        
+        onSnapshot(notifQuery, (snapshot) => {
+            if (!snapshot.empty) {
+                notifBadge.style.display = "block";
+                notifBadge.innerText = snapshot.size;
+                notifList.innerHTML = ""; 
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    notifList.innerHTML += `<div style="padding: 10px; background: rgba(255,255,255,0.8); border-radius: 8px; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">${data.message}</div>`;
+                });
+            }
+        });
+
+        const folderGrid = document.getElementById("folderGrid");
+        
+        // --- ADMIN MULTI-USER MASTER CONTROL ---
+        if (loggedInUser === "chinmay") {
+            folderGrid.innerHTML = `
+                <!-- ADMIN MASTER SEARCH PANEL -->
+                <div class="album-card" style="text-align: left; border: 2px solid #ff9a9e; background: #fffafb;">
+                    <div style="text-align: center;">
+                        <div class="folder-icon">👑</div>
+                        <h3>Admin Master Control</h3>
+                        <p>Manage Any User's Vault</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <input type="text" id="adminUserSearch" placeholder="Type name (e.g. suman, jiya)" style="width: 100%; padding: 10px; border-radius: 12px; border: 1px solid #ff9a9e; outline: none; margin-bottom: 10px; font-size: 14px; text-align: center;">
+                        
+                        <div style="display: flex; gap: 5px;">
+                            <button class="cute-btn" onclick="openAdminGallery()" style="flex: 1; padding: 8px; margin: 0; font-size: 12px;">📸 Gallery (Upload)</button>
+                            <button class="cute-btn" onclick="openAdminBday()" style="flex: 1; padding: 8px; margin: 0; font-size: 12px;">🎂 View Bdayweb</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FRIENDS OUTING (Common) -->
+                <div class="album-card" onclick="window.location.href='gallery.html?folder=friends'" style="display: flex; flex-direction: column; justify-content: center;">
+                    <div class="folder-icon">🏕️</div>
+                    <h3>Friends Outing</h3>
+                    <p>Shared Group Pics & Videos</p>
+                </div>
+            `;
+
+            // Admin Actions
+            window.openAdminGallery = () => {
+                const targetUser = document.getElementById("adminUserSearch").value.toLowerCase().trim();
+                if(!targetUser) { alert("Pehle dabe mein naam likh bhai!"); return; }
+                // Direct target user ki 2026 gallery open hogi
+                window.location.href = `gallery.html?folder=${targetUser}_2026`;
+            };
+
+            window.openAdminBday = () => {
+                const targetUser = document.getElementById("adminUserSearch").value.toLowerCase().trim();
+                if(!targetUser) { alert("Pehle dabe mein naam likh bhai!"); return; }
+                
+                // Agar Suman hai toh uski special file open hogi, baaki sabke liye dynamic common file
+                if(targetUser === "suman") {
+                    window.location.href = "cutu26.html";
+                } else {
+                    window.location.href = `birthday.html?folder=${targetUser}`;
+                }
+            };
+
+        } else {
+            // --- NORMAL USER VIEW (Suman, Jiya, etc.) ---
+            let bdayPageLink = "birthday.html?folder=" + loggedInUser; 
+            if(loggedInUser === "suman") { bdayPageLink = "cutu26.html"; }
+
+            folderGrid.innerHTML = `
+                <!-- USER'S OWN PRIVATE VAULT -->
+                <div class="album-card" style="text-align: left;">
+                    <div style="text-align: center;">
+                        <div class="folder-icon">🎂</div>
+                        <h3>${displayName}'s Personal Vault</h3>
+                        <p>Private Yearly Celebrations</p>
+                    </div>
+                    <button class="cute-btn" onclick="toggleBdayOptions()" style="margin-top: 10px; padding: 8px;">Open Year: 2026 📂</button>
+                    
+                    <div id="bdayOptionsPanel" class="options-panel">
+                        <span class="year-tag">Year 2026</span><br>
+                        <button class="cute-btn option-btn" onclick="window.location.href='gallery.html?folder=${loggedInUser}_2026'">📸 My Gallery</button>
+                        <button class="cute-btn option-btn" onclick="window.location.href='${bdayPageLink}'">🎂 My Bdayweb</button>
+                    </div>
+                </div>
+
+                <!-- FRIENDS OUTING (Common) -->
+                <div class="album-card" onclick="window.location.href='gallery.html?folder=friends'" style="display: flex; flex-direction: column; justify-content: center;">
+                    <div class="folder-icon">🏕️</div>
+                    <h3>Friends Outing</h3>
+                    <p>Shared Group Pics & Videos</p>
+                </div>
+            `;
         }
 
-        function deletePhoto(index) {
-            let cloudVault = JSON.parse(localStorage.getItem('sumanCloudVault')) || [];
-            cloudVault.splice(index, 1);
-            localStorage.setItem('sumanCloudVault', JSON.stringify(cloudVault));
-            loadGallery();
-        }
+        // LIVE CHAT
+        const chatBox = document.getElementById("chatBox");
+        const messageInput = document.getElementById("messageInput");
+        const sendBtn = document.querySelector(".send-btn");
+
+        sendBtn.addEventListener("click", async () => {
+            const text = messageInput.value.trim();
+            if (text !== "") {
+                await addDoc(collection(db, "messages"), {
+                    text: text,
+                    sender: displayName,
+                    timestamp: serverTimestamp()
+                });
+                messageInput.value = "";
+            }
+        });
+
+        const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+        onSnapshot(q, (snapshot) => {
+            chatBox.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const msgDiv = document.createElement("div");
+                msgDiv.className = "message";
+                msgDiv.innerHTML = `<span class="sender">${data.sender}:</span> ${data.text}`;
+                chatBox.appendChild(msgDiv);
+            });
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
     </script>
 </body>
 </html>
