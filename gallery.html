@@ -3,186 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault Gallery 📸🎥</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Photo Gallery 📸</title>
+    
+    <style>
+        body { background: #fff0f5; font-family: -apple-system, BlinkMacSystemFont, sans-serif; text-align: center; padding: 20px; color: #4a4a4a; margin: 0; }
+        .header-panel { background: rgba(255,255,255,0.7); padding: 20px; border-radius: 16px; display: inline-block; margin-bottom: 20px; margin-top: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        h2 { color: #db7093; margin: 0 0 15px 0; text-transform: capitalize; }
+        
+        .cute-btn { background: #ff9a9e; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(255, 154, 158, 0.4); }
+        .back-btn { position: absolute; left: 15px; top: 15px; background: rgba(255,255,255,0.8); color: #db7093; border: 1px solid #ff9a9e; }
+        
+        input[type="file"] { margin-bottom: 10px; font-size: 14px; }
+        #loadingMsg { display: none; color: #ff69b4; font-weight: bold; margin-top: 10px; animation: blink 1s infinite; font-size: 14px; }
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* GRID SYSTEM */
+        .photo-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; max-width: 900px; margin: 0 auto; }
+        .photo-grid img { width: 160px; height: 160px; object-fit: cover; border-radius: 12px; border: 3px solid white; box-shadow: 0 8px 15px rgba(0,0,0,0.1); animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
 </head>
-<body class="vault-body">
-    <div class="hearts-container">
-        <div class="heart">💖</div><div class="heart">❤️</div><div class="heart">💕</div>
+<body>
+
+    <!-- YEH BUTTON WAPAS TERE VAULT.HTML DASHBOARD PE BHEJEGA -->
+    <button class="cute-btn back-btn" onclick="window.location.href='vault.html'">⬅ Back to Vault</button>
+    
+    <div class="header-panel">
+        <h2 id="galleryTitle">Gallery ✨</h2>
+        <p style="font-size: 13px; color: #777; margin-bottom: 15px;">Live Cloud Upload (No Hang!)</p>
+        
+        <input type="file" id="uploadInput" accept="image/jpeg, image/png, image/jpg">
+        <button class="cute-btn" onclick="uploadToCloud()">Upload to Cloud 🚀</button>
+        <p id="loadingMsg">Uploading photo directly to internet... Please wait ☁️⏳</p>
     </div>
 
-    <div class="dashboard" style="flex-direction: column; height: auto;">
-        <!-- Header -->
-        <div class="glass-panel" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px;">
-            <h2 id="galleryTitle">Memories Vault ✨</h2>
-            <button class="cute-btn" onclick="window.location.href='vault.html'" style="width: auto; padding: 10px 20px; margin-top:0;">⬅ Back</button>
-        </div>
+    <!-- PHOTOS YAHAN AAYENGI -->
+    <div class="photo-grid" id="photoGrid"></div>
 
-        <!-- ADMIN POWER PANEL -->
-        <div id="adminUploadSection" class="glass-panel" style="display: none; width: 100%; margin-bottom: 20px; text-align: center;">
-            <h3 style="margin-bottom: 15px;">Admin Control: Upload Photo or Video 📤</h3>
-            <!-- UPDATE: accept dono allow karega ab -->
-            <input type="file" id="photoInput" accept="image/*,video/*" style="margin-bottom: 10px;">
-            <br>
-            <button id="uploadBtn" class="cute-btn" style="width: auto; padding: 10px 30px;">Upload File</button>
-        </div>
-
-        <!-- Photos & Videos Render Layout -->
-        <div class="album-grid" id="photoGrid" style="width: 100%;"></div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, where, doc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDgt_FpIn3fqUsSJGe7L7gr4wApPZEdMos",
-            authDomain: "yourvault-f650c.firebaseapp.com",
-            projectId: "yourvault-f650c",
-            storageBucket: "yourvault-f650c.firebasestorage.app",
-            messagingSenderId: "777606101043",
-            appId: "1:777606101043:web:33e47a67decdf40c224b46"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-
+    <script>
+        // TERI CLOUD API KEY
+        const API_KEY = "E59dffa4691f853680e4c3efc19b2703";
+        
+        // CHECK KAR RAHA HAI KI KAUNSA FOLDER OPEN HUA HAI (Suman, Friends, etc.)
         const urlParams = new URLSearchParams(window.location.search);
-        const currentFolder = urlParams.get('folder') || 'friends';
+        const folderName = urlParams.get('folder') || 'default_folder';
         
-        document.getElementById("galleryTitle").innerText = currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1) + "'s Gallery ✨";
+        document.getElementById('galleryTitle').innerText = folderName.replace('_', ' ') + " Gallery 📸";
 
-        const loggedInUser = localStorage.getItem("vaultUser") || "guest";
-        const displayName = loggedInUser.charAt(0).toUpperCase() + loggedInUser.slice(1);
-        
-        if (loggedInUser === "chinmay") {
-            document.getElementById("adminUploadSection").style.display = "block";
+        function uploadToCloud() {
+            const fileInput = document.getElementById('uploadInput');
+            const loadingMsg = document.getElementById('loadingMsg');
+            
+            if (!fileInput.files.length) return;
+            
+            loadingMsg.style.display = "block"; // Loader ON
+            
+            let formData = new FormData();
+            formData.append("image", fileInput.files[0]);
+
+            fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    // Cloud se link mila, ab isko folder ke naam se save kar
+                    saveToLocal(data.data.display_url);
+                    loadingMsg.style.display = "none";
+                    fileInput.value = ""; 
+                } else {
+                    alert("Upload fail! Cloud API mein error aaya.");
+                    loadingMsg.style.display = "none";
+                }
+            })
+            .catch(err => {
+                alert("Internet Error! Check connection.");
+                loadingMsg.style.display = "none";
+            });
         }
 
-        const uploadBtn = document.getElementById("uploadBtn");
-        const photoInput = document.getElementById("photoInput");
+        // FOLDER KE HISAAB SE SEPARATE SAVE KAREGA
+        function saveToLocal(url) {
+            const storageKey = 'vaultGalleryData_' + folderName;
+            let images = JSON.parse(localStorage.getItem(storageKey)) || [];
+            images.unshift(url);
+            localStorage.setItem(storageKey, JSON.stringify(images));
+            loadGallery();
+        }
 
-        uploadBtn.addEventListener("click", async () => {
-            const file = photoInput.files[0];
-            if (!file) { alert("Pehle ek file select karo bro!"); return; }
-
-            // UPDATE: Check agar file video hai ya image
-            const mediaType = file.type.startsWith("video/") ? "video" : "image";
-
-            uploadBtn.innerText = "Uploading...";
-            try {
-                const storageRef = ref(storage, `vault_media/${Date.now()}_${file.name}`);
-                const snapshot = await uploadBytes(storageRef, file);
-                const downloadURL = await getDownloadURL(snapshot.ref);
-
-                await addDoc(collection(db, "photos"), {
-                    url: downloadURL,
-                    folder: currentFolder,
-                    mediaType: mediaType, // Database mein track karega type
-                    timestamp: Date.now(),
-                    likes: 0, 
-                    comments: [] 
-                });
-
-                alert("Memory uploaded perfectly! 🎉");
-                photoInput.value = "";
-            } catch (err) {
-                console.error(err);
-                alert("Upload fail hua.");
-            }
-            uploadBtn.innerText = "Upload File";
-        });
-
-        const photoGrid = document.getElementById("photoGrid");
-        const q = query(collection(db, "photos"), where("folder", "==", currentFolder));
-        
-        onSnapshot(q, (snapshot) => {
-            photoGrid.innerHTML = "";
-            if(snapshot.empty) {
-                photoGrid.innerHTML = "<p style='color:#666; text-align:center; width:100%;'>Abhi yahan koi memory nahi hai.</p>";
-            }
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const docId = docSnap.id;
-                
-                const likesCount = data.likes || 0;
-                const commentsArray = data.comments || [];
-
-                let commentsHTML = "";
-                commentsArray.forEach(c => {
-                    commentsHTML += `<div style="font-size:12px; text-align:left; background:#f4f4f4; padding:6px; border-radius:8px; margin-bottom:4px;">
-                        <b style="color:#ff9a9e;">${c.sender}:</b> ${c.text}
-                    </div>`;
-                });
-
-                // UPDATE: Photo ya Video ka logic
-                let mediaElement = "";
-                if (data.mediaType === "video") {
-                    mediaElement = `<video src="${data.url}" controls style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; background: #000;"></video>`;
-                } else {
-                    mediaElement = `<img src="${data.url}" alt="Memory">`;
-                }
-
-                const card = document.createElement("div");
-                card.className = "photo-card";
-                card.innerHTML = `
-                    ${mediaElement}
-                    
-                    <div style="display:flex; justify-content:space-between; gap:10px; margin-bottom:10px;">
-                        <button class="cute-btn like-btn" data-id="${docId}" style="flex:1; padding:8px; font-size:13px; margin:0;">❤️ ${likesCount}</button>
-                        <a href="${data.url}" target="_blank" download="vault_media" style="flex:1;">
-                            <button class="cute-btn" style="width:100%; padding:8px; font-size:13px; margin:0;">💾 Save</button>
-                        </a>
-                    </div>
-
-                    <div style="max-height: 80px; overflow-y: auto; margin-bottom: 8px;">
-                        ${commentsHTML}
-                    </div>
-                    
-                    <div style="display:flex; gap:5px;">
-                        <input type="text" id="comment-${docId}" placeholder="Comment..." style="flex:1; padding:6px 10px; border-radius:15px; border:1px solid #ddd; outline:none; font-size:12px;">
-                        <button class="cute-btn comment-btn" data-id="${docId}" style="padding:6px 12px; margin:0; width:auto; font-size:12px;">Send</button>
-                    </div>
-                `;
-                photoGrid.appendChild(card);
-            });
-        });
-
-        photoGrid.addEventListener("click", async (e) => {
-            if (e.target.classList.contains("like-btn")) {
-                const docId = e.target.getAttribute("data-id");
-                await updateDoc(doc(db, "photos", docId), {
-                    likes: increment(1)
-                });
-            }
+        function loadGallery() {
+            const grid = document.getElementById('photoGrid');
+            const storageKey = 'vaultGalleryData_' + folderName;
+            let images = JSON.parse(localStorage.getItem(storageKey)) || [];
             
-            if (e.target.classList.contains("comment-btn")) {
-                const docId = e.target.getAttribute("data-id");
-                const inputField = document.getElementById(`comment-${docId}`);
-                const text = inputField.value.trim();
-                
-                if (text !== "") {
-                    await updateDoc(doc(db, "photos", docId), {
-                        comments: arrayUnion({
-                            sender: displayName,
-                            text: text,
-                            timestamp: Date.now()
-                        })
-                    });
-
-                    if (loggedInUser !== "chinmay") {
-                        await addDoc(collection(db, "notifications"), {
-                            message: `<b>${displayName}</b> ne memory par comment kiya: "${text}"`,
-                            timestamp: Date.now()
-                        });
-                    }
-
-                    inputField.value = ""; 
-                }
+            if(images.length === 0) {
+                grid.innerHTML = "<p style='color:#888; width: 100%;'>No memories yet. Upload your first photo! ✨</p>";
+                return;
             }
-        });
+            grid.innerHTML = images.map(img => `<img src="${img}" alt="Cloud Memory">`).join('');
+        }
+
+        // Page load hote hi photos dikhao
+        window.onload = loadGallery;
     </script>
 </body>
 </html>
