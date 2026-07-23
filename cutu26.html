@@ -10,214 +10,113 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
             background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 50%, #f3e5ab 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: #4a4a4a;
-            position: relative;
-            padding-bottom: 60px;
+            min-height: 100vh; overflow-x: hidden; color: #4a4a4a;
+            position: relative; padding-bottom: 60px;
         }
 
         /* --- 1. INTRO SCREEN --- */
         .intro-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #ffb6c1, #ffc0cb, #e6e6fa);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999;
-            animation: fadeOutScreen 4.5s forwards;
-            pointer-events: none;
+            display: flex; justify-content: center; align-items: center; z-index: 9999;
+            animation: fadeOutScreen 4.5s forwards; pointer-events: none;
         }
-
         .elegant-title {
-            font-size: 3rem; font-weight: 300; color: #fff;
-            font-family: 'Georgia', serif; font-style: italic;
-            text-shadow: 0 4px 15px rgba(218, 112, 214, 0.4);
-            opacity: 0; animation: fadeInOutText 4s forwards;
+            font-size: 3rem; font-weight: 300; color: #fff; font-family: 'Georgia', serif; font-style: italic;
+            text-shadow: 0 4px 15px rgba(218, 112, 214, 0.4); opacity: 0; animation: fadeInOutText 4s forwards;
         }
-
         @keyframes fadeInOutText {
             0% { opacity: 0; transform: scale(0.9); filter: blur(5px); }
-            30% { opacity: 1; transform: scale(1); filter: blur(0); }
-            70% { opacity: 1; transform: scale(1); filter: blur(0); }
+            30%, 70% { opacity: 1; transform: scale(1); filter: blur(0); }
             100% { opacity: 0; transform: scale(1.05); filter: blur(8px); }
         }
-
-        @keyframes fadeOutScreen {
-            80% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; }
-        }
+        @keyframes fadeOutScreen { 80% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
 
         /* --- 2. PENGUINS & HEARTS --- */
         .side-animation {
-            position: fixed; top: 0; width: 120px; height: 100vh;
-            display: flex; flex-direction: column; justify-content: space-around;
-            align-items: center; z-index: 5; pointer-events: none;
+            position: fixed; top: 0; width: 120px; height: 100vh; display: flex; flex-direction: column;
+            justify-content: space-around; align-items: center; z-index: 5; pointer-events: none;
         }
-
-        .left-side { left: 10px; }
-        .right-side { right: 10px; }
-
-        .penguin-container {
-            font-size: 40px; position: relative;
-            animation: bounce 2s infinite alternate ease-in-out;
-        }
-
-        .floating-heart {
-            position: absolute; font-size: 20px; opacity: 0;
-            animation: floatHeartUp 3s infinite linear;
-        }
-
+        .left-side { left: 10px; } .right-side { right: 10px; }
+        .penguin-container { font-size: 40px; position: relative; animation: bounce 2s infinite alternate ease-in-out; }
+        .floating-heart { position: absolute; font-size: 20px; opacity: 0; animation: floatHeartUp 3s infinite linear; }
         @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
         @keyframes floatHeartUp { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-80px) scale(1.2); opacity: 0; } }
 
         /* --- MAIN WRAPPER & GLASS CARDS --- */
         .main-wrapper { max-width: 700px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
-
         .glass-card {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-radius: 30px; padding: 30px;
-            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.3), inset 0 0 0 1px rgba(255,255,255,0.7);
+            background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px; padding: 30px; box-shadow: 0 15px 35px rgba(255, 182, 193, 0.3), inset 0 0 0 1px rgba(255,255,255,0.7);
             text-align: center; margin-top: 40px; margin-bottom: 40px;
         }
 
         /* --- 3. FIRST CARD (Round) --- */
-        .flip-card {
-            background-color: transparent; width: 260px; height: 260px;
-            margin: 30px auto; perspective: 1000px; cursor: pointer;
-        }
-        .flip-card-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-        }
+        .flip-card { background-color: transparent; width: 260px; height: 260px; margin: 30px auto; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.8s; transform-style: preserve-3d; }
         .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
         .flip-card-front, .flip-card-back {
-            position: absolute; width: 100%; height: 100%;
-            -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 50%; border: 5px solid #ffb6c1; overflow: hidden;
-            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
+            position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 50%; border: 5px solid #ffb6c1; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
         }
         .flip-card-front { z-index: 2; }
         .flip-card-front img { width: 100%; height: 100%; object-fit: cover; }
-        .flip-card-back {
-            background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
-            color: #4a4a4a; transform: rotateY(180deg);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px; z-index: 1;
-        }
+        .flip-card-back { background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%); transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; z-index: 1; }
 
-        .cute-btn {
-            background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%); color: white;
-            border: none; padding: 14px 35px; font-size: 16px; font-weight: bold;
-            border-radius: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3);
-            transition: all 0.3s ease; margin-top: 15px;
-        }
+        .cute-btn { background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%); color: white; border: none; padding: 14px 35px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3); transition: all 0.3s; margin-top: 15px; }
         .cute-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(244, 63, 94, 0.5); }
 
         /* --- 4. COLLAGE SECTION --- */
-        .collage-section {
-            position: relative; height: 400px; margin: 40px 0; background: rgba(255, 255, 255, 0.3);
-            border-radius: 24px; overflow: hidden; display: flex; justify-content: center; align-items: center;
-        }
-        .collage-img {
-            position: absolute; width: 130px; height: 130px; object-fit: cover;
-            border-radius: 16px; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            opacity: 0.2; animation: randomFade 6s infinite ease-in-out;
-        }
-        .img-1 { top: 15%; left: 10%; animation-delay: 0s; } .img-2 { top: 10%; right: 12%; animation-delay: 1.5s; }
-        .img-3 { bottom: 15%; left: 8%; animation-delay: 3s; } .img-4 { bottom: 12%; right: 10%; animation-delay: 4.5s; }
+        .collage-section { position: relative; height: 400px; margin: 40px 0; background: rgba(255, 255, 255, 0.3); border-radius: 24px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        .collage-img { position: absolute; width: 130px; height: 130px; object-fit: cover; border-radius: 16px; border: 3px solid white; opacity: 0.2; animation: randomFade 6s infinite ease-in-out; }
+        .img-1 { top: 15%; left: 10%; animation-delay: 0s; } .img-2 { top: 10%; right: 12%; animation-delay: 1.5s; } .img-3 { bottom: 15%; left: 8%; animation-delay: 3s; } .img-4 { bottom: 12%; right: 10%; animation-delay: 4.5s; }
         @keyframes randomFade { 0%, 100% { opacity: 0.1; transform: scale(0.95); } 50% { opacity: 0.9; transform: scale(1.05); } }
         .center-action { position: relative; z-index: 20; }
 
-        /* --- 5. BADA FLIP CARD (NEW BULLETPROOF FIX) --- */
+        /* --- 5. BADA CARD (THE FAKE 2D FLIP - 100% SAFARI PROOF) --- */
         .secret-panel { display: none; margin-top: 20px; animation: fadeIn 1s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .suman-card-container {
-            width: 320px; height: 460px; margin: 30px auto; position: relative; perspective: 1200px;
-        }
+        .safari-safe-container { width: 320px; height: 460px; margin: 30px auto; position: relative; }
         
-        .suman-card-inner {
-            width: 100%; height: 100%; position: relative;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-        }
-        
-        .suman-card-container.flipped .suman-card-inner { transform: rotateY(180deg); }
-
-        .suman-card-front, .suman-card-back {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 24px; border: 5px solid #ffb6c1;
+        .safari-face {
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            border-radius: 24px; border: 5px solid #ffb6c1; overflow: hidden;
             box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
+            transition: transform 0.3s ease-in-out; /* Magic flip animation yahan se aayegi */
         }
 
-        /* FRONT IMAGE FIX */
-        .suman-card-front { background-color: white; z-index: 2; cursor: pointer; }
-        .suman-card-front img {
-            width: 100%; height: 100%; object-fit: cover;
-            border-radius: 19px; /* Yeh hai image ko box ke andar lock rakhne ka raaz */
-            display: block;
-        }
-        .tap-hint {
-            position: absolute; bottom: 15px; left: 0; width: 100%;
-            text-align: center; color: white; font-weight: bold;
-            text-shadow: 0px 2px 5px rgba(0,0,0,0.8); font-size: 15px;
-            pointer-events: none;
-        }
+        /* Front Face (Photo) */
+        .safari-front { background: white; cursor: pointer; }
+        .safari-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .tap-hint { position: absolute; bottom: 15px; left: 0; width: 100%; text-align: center; color: white; font-weight: bold; text-shadow: 0px 2px 5px rgba(0,0,0,0.8); font-size: 15px; pointer-events: none; }
 
-        /* BACK SCROLL FIX */
-        .suman-card-back {
-            background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
-            transform: rotateY(180deg); z-index: 1; display: flex; flex-direction: column;
-            border-radius: 24px;
-        }
-        .suman-scroll-area {
-            flex: 1; padding: 25px; padding-top: 35px;
-            overflow-y: auto; -webkit-overflow-scrolling: touch; color: #4a4a4a; text-align: left;
-        }
-        .close-flip-btn {
-            position: absolute; top: 10px; right: 10px;
-            background: rgba(255, 182, 193, 0.5); border: 2px solid white; border-radius: 50%;
-            width: 32px; height: 32px; font-size: 14px; font-weight: bold; color: white;
-            cursor: pointer; z-index: 10;
-        }
-        .suman-scroll-area h3 { color: #db7093; margin-bottom: 15px; font-size: 1.4rem; text-align: center;}
-        .suman-scroll-area p { font-size: 1rem; line-height: 1.6; font-weight: 500; margin-bottom: 15px; }
+        /* Back Face (Text) */
+        .safari-back { background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%); display: flex; flex-direction: column; }
+        .close-flip-btn { position: absolute; top: 10px; right: 10px; background: rgba(255, 182, 193, 0.7); border: 2px solid white; border-radius: 50%; width: 32px; height: 32px; font-size: 14px; font-weight: bold; color: white; cursor: pointer; z-index: 10; }
+        
+        /* SCROLL AREA (SAFARI MEIN MAKKHAN JAISE CHALEGA) */
+        .scrollable-text { flex: 1; padding: 25px; padding-top: 35px; overflow-y: auto; -webkit-overflow-scrolling: touch; color: #4a4a4a; text-align: left; }
+        .scrollable-text h3 { color: #db7093; margin-bottom: 15px; font-size: 1.4rem; text-align: center;}
+        .scrollable-text p { font-size: 1rem; line-height: 1.6; font-weight: 500; margin-bottom: 15px; }
 
         /* --- 6. COMMENT SECTION --- */
         .comment-section { text-align: left; }
-        .comment-input {
-            width: 100%; height: 100px; padding: 15px; border-radius: 16px; border: 2px solid #ffb6c1;
-            outline: none; resize: none; background: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 15px;
-        }
-        .comment-input:focus { border-color: #ff69b4; box-shadow: 0 0 10px rgba(255, 105, 180, 0.2); }
+        .comment-input { width: 100%; height: 100px; padding: 15px; border-radius: 16px; border: 2px solid #ffb6c1; outline: none; resize: none; background: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 15px; }
         .reviews-display { margin-top: 20px; max-height: 200px; overflow-y: auto; }
-        .review-item {
-            background: white; padding: 10px 15px; border-radius: 12px;
-            margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); font-size: 13px;
-        }
-        .nav-btn {
-            position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.5);
-            border: 1px solid rgba(255,255,255,0.8); padding: 6px 15px; border-radius: 15px;
-            cursor: pointer; font-size: 12px; font-weight: bold; z-index: 100;
-        }
+        .review-item { background: white; padding: 10px 15px; border-radius: 12px; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); font-size: 13px; }
+        .nav-btn { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.8); padding: 6px 15px; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: bold; z-index: 100; }
     </style>
 </head>
 <body>
 
-    <div class="intro-overlay">
-        <h1 class="elegant-title">Happy Birthday Behena... ✨</h1>
-    </div>
+    <div class="intro-overlay"><h1 class="elegant-title">Happy Birthday Behena... ✨</h1></div>
 
     <div class="side-animation left-side">
         <div class="penguin-container">🐧<div class="floating-heart" style="animation-delay: 0s;">💖</div></div>
@@ -231,16 +130,13 @@
     <button class="nav-btn" onclick="window.location.href='vault.html'">⬅ Back</button>
 
     <div class="main-wrapper">
-        
         <div class="glass-card">
             <h1 style="color: #db7093; font-weight: 600;">Suman's Day ✨</h1>
             <p style="font-size: 14px; color: #888; margin-top: 5px;">Click the card to open the first surprise</p>
 
             <div class="flip-card" onclick="this.classList.toggle('flipped')">
                 <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <img src="IMG_0239.jpeg" alt="Suman Front">
-                    </div>
+                    <div class="flip-card-front"><img src="IMG_0239.jpeg" alt="Suman Front"></div>
                     <div class="flip-card-back">
                         <h3>Happy Birthday! 🎂</h3>
                         <p>To the most incredible sister. May this year bring you endless laughs and fulfillment! Let's make every moment memorable. ✨</p>
@@ -254,43 +150,39 @@
             <img src="IMG_0233.PNG" class="collage-img img-2" alt="Memory 2">
             <img src="IMG_0234.PNG" class="collage-img img-3" alt="Memory 3">
             <img src="IMG_0238.jpg" class="collage-img img-4" alt="Memory 4">
-
-            <div class="center-action">
-                <button class="cute-btn" onclick="revealSecretPanel()" id="masterActionBtn">Click Me 🌸</button>
-            </div>
+            <div class="center-action"><button class="cute-btn" onclick="revealSecretPanel()" id="masterActionBtn">Click Me 🌸</button></div>
         </div>
 
-        <!-- NEW BULLETPROOF HTML STRUCTURE -->
+        <!-- NEW SAFARI-SAFE CONTAINER (NO 3D BUGS) -->
         <div id="secretMessagePanel" class="secret-panel">
             <div class="glass-card" style="border: 2px dashed #ffb6c1;">
                 <h2 style="color: #ff69b4; margin-bottom: 5px;">The Ultimate Message 💌</h2>
                 <p style="font-size: 13px; color: #777; margin-bottom: 15px;">Read my letter below!</p>
                 
-                <div id="badaCard" class="suman-card-container">
-                    <div class="suman-card-inner">
-                        
-                        <!-- FRONT (Clicking here flips it) -->
-                        <div class="suman-card-front" onclick="document.getElementById('badaCard').classList.add('flipped')">
-                            <img src="IMG_0237.PNG" alt="Custom Birthday Pic">
-                            <div class="tap-hint">Tap to open 💌</div>
-                        </div>
-                        
-                        <!-- BACK (Clicking 'X' flips it back, freely scroll text) -->
-                        <div class="suman-card-back">
-                            <button class="close-flip-btn" onclick="document.getElementById('badaCard').classList.remove('flipped')">✖</button>
-                            
-                            <div class="suman-scroll-area">
-                                <h3>Dearest Suman, 🌸</h3>
-                                <p>Happy Birthday meri cute behena! 🎂💖 Aaj tere is special din par ekdum dil se yeh message likh raha hoon.</p>
-                                <p>Yaar, kitni cute hai tu! Sachi batau toh poori class mein tu hi sabse pyari aur adorable lagti hai. 🥺 Tere paas aake ek alag hi 'apnepan' wali feeling aati hai, jaise ekdum apne ghar wali vibe milti hai.</p>
-                                <p>Kabhi kabhi lagta hai, kaash tu meri sagi behen hoti! Kasam se, bohot laad karta tera, ekdum Rani jaisa rakhta aur tujhe duniya bhar ka pamper karta. 👑✨ Tu jo mangti, tera bhai tere liye hazir kar deta.</p>
-                                <p>I really, really don't wanna lose you yaar... please stay with me forever. 🤞💕 Life mein chahe kuch bhi ho, promise kar ki tu hamesha mere paas rahegi.</p>
-                                <p>Aur tera cuteness na, uff! Ekdum pyari si rabbit 🐰 jaisi dikhti hai tu. Jab bhi tujhe dekhta hoon, sach mein mann karta hai aake bohot tight wala hug hi karlu! 🤗</p>
-                                <p>I love you sooo much, meri pyari behena! 💖 Hamesha aisi hi muskurati reh. Tera bhai hamesha tere saath hai. Happy Birthday again! ✨🎂</p>
-                            </div>
-                        </div>
-
+                <div class="safari-safe-container">
+                    
+                    <!-- FRONT (PHOTO) -->
+                    <div id="frontFace" class="safari-face safari-front" onclick="doFakeFlip('back')">
+                        <img src="IMG_0237.PNG" alt="Custom Birthday Pic">
+                        <div class="tap-hint">Tap to open 💌</div>
                     </div>
+                    
+                    <!-- BACK (TEXT - Hidden initially) -->
+                    <div id="backFace" class="safari-face safari-back" style="display: none; transform: scaleX(0);">
+                        <button class="close-flip-btn" onclick="doFakeFlip('front')">✖</button>
+                        
+                        <div class="scrollable-text">
+                            <h3>Dearest Suman, 🌸</h3>
+                            <p>Happy Birthday meri cute behena! 🎂💖 Aaj tere is special din par ekdum dil se yeh message likh raha hoon.</p>
+                            <p>Yaar, kitni cute hai tu! Sachi batau toh poori class mein tu hi sabse pyari aur adorable lagti hai. 🥺 Tere paas aake ek alag hi 'apnepan' wali feeling aati hai, jaise ekdum apne ghar wali vibe milti hai.</p>
+                            <p>Kabhi kabhi lagta hai, kaash tu meri sagi behen hoti! Kasam se, bohot laad karta tera, ekdum Rani jaisa rakhta aur tujhe duniya bhar ka pamper karta. 👑✨ Tu jo mangti, tera bhai tere liye hazir kar deta.</p>
+                            <p>I really, really don't wanna lose you yaar... please stay with me forever. 🤞💕 Life mein chahe kuch bhi ho, promise kar ki tu hamesha mere paas rahegi.</p>
+                            <p>Aur tera cuteness na, uff! Ekdum pyari si rabbit 🐰 jaisi dikhti hai tu. Jab bhi tujhe dekhta hoon, sach mein mann karta hai aake bohot tight wala hug hi karlu! 🤗</p>
+                            <p>I love you sooo much, meri pyari behena! 💖 Hamesha aisi hi muskurati reh. Tera bhai hamesha tere saath hai. Happy Birthday again! ✨🎂</p>
+                            <br>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -298,38 +190,52 @@
         <div class="glass-card comment-section">
             <h3 style="color: #db7093; text-align: center; margin-bottom: 15px;">Leave Your Birthday Review/Wish 💬</h3>
             <textarea id="reviewText" class="comment-input" placeholder="Write something sweet about this page..."></textarea>
-            <center>
-                <button class="cute-btn" onclick="submitReview()" style="margin-top: 0; padding: 10px 30px; font-size: 14px;">Submit Review 💌</button>
-            </center>
-            
+            <center><button class="cute-btn" onclick="submitReview()" style="margin-top: 0; padding: 10px 30px; font-size: 14px;">Submit Review 💌</button></center>
             <div class="reviews-display" id="reviewsContainer"></div>
         </div>
-
     </div>
 
     <script>
-        setTimeout(() => {
-            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-        }, 4000);
+        setTimeout(() => { confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } }); }, 4000);
 
         function revealSecretPanel() {
             confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
             document.getElementById("secretMessagePanel").style.display = "block";
             document.getElementById("masterActionBtn").innerText = "Unlocked! ✨";
-            setTimeout(() => {
-                document.getElementById("secretMessagePanel").scrollIntoView({ behavior: 'smooth' });
-            }, 200);
+            setTimeout(() => { document.getElementById("secretMessagePanel").scrollIntoView({ behavior: 'smooth' }); }, 200);
+        }
+
+        /* --- THE MAGIC FAKE FLIP LOGIC --- */
+        function doFakeFlip(direction) {
+            const front = document.getElementById('frontFace');
+            const back = document.getElementById('backFace');
+            
+            if (direction === 'back') {
+                front.style.transform = 'scaleX(0)'; // Photo pichak jayegi
+                setTimeout(() => {
+                    front.style.display = 'none';
+                    back.style.display = 'flex';
+                    void back.offsetWidth; // Force update
+                    back.style.transform = 'scaleX(1)'; // Text bada ho jayega
+                }, 300);
+            } else {
+                back.style.transform = 'scaleX(0)'; // Text pichak jayega
+                setTimeout(() => {
+                    back.style.display = 'none';
+                    front.style.display = 'block';
+                    void front.offsetWidth; // Force update
+                    front.style.transform = 'scaleX(1)'; // Photo wapas aa jayegi
+                }, 300);
+            }
         }
 
         function submitReview() {
             const input = document.getElementById("reviewText");
             const text = input.value.trim();
             if(text === "") { alert("Kuch to likho behena!"); return; }
-
             let reviews = JSON.parse(localStorage.getItem("sumanReviews")) || [];
             reviews.push({ text: text, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
             localStorage.setItem("sumanReviews", JSON.stringify(reviews));
-            
             input.value = "";
             loadReviews();
             confetti({ particleCount: 50, spread: 40 });
@@ -338,16 +244,8 @@
         function loadReviews() {
             const container = document.getElementById("reviewsContainer");
             let reviews = JSON.parse(localStorage.getItem("sumanReviews")) || [];
-            if(reviews.length === 0) {
-                container.innerHTML = "<p style='color:#999; text-align:center; font-size:12px;'>Abhi tak koi review nahi aaya hai.</p>";
-                return;
-            }
-            container.innerHTML = reviews.map(r => `
-                <div class="review-item">
-                    <span style="color:#ff69b4; font-weight:bold;">Suman:</span> ${r.text} 
-                    <span style="float:right; font-size:10px; color:#aaa;">${r.time}</span>
-                </div>
-            `).join('');
+            if(reviews.length === 0) { container.innerHTML = "<p style='color:#999; text-align:center; font-size:12px;'>Abhi tak koi review nahi aaya hai.</p>"; return; }
+            container.innerHTML = reviews.map(r => `<div class="review-item"><span style="color:#ff69b4; font-weight:bold;">Suman:</span> ${r.text} <span style="float:right; font-size:10px; color:#aaa;">${r.time}</span></div>`).join('');
         }
         window.addEventListener("DOMContentLoaded", loadReviews);
     </script>
