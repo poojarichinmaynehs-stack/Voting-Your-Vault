@@ -181,9 +181,17 @@
             };
 
         } else {
-            // --- NORMAL USER VIEW (Suman, Jiya, etc.) ---
+            
             let bdayPageLink = "birthday.html?folder=" + loggedInUser; 
-            if(loggedInUser === "suman") { bdayPageLink = "cutu26.html"; }
+            
+            // Special cases
+            if(loggedInUser === "suman") { 
+                bdayPageLink = "cutu26.html"; 
+            } else if(loggedInUser === "nathasha") {
+                // Yahan ensure kar ki file ka naam ekdum match ho
+                bdayPageLink = "nathasha.html";
+            }
+
 
             folderGrid.innerHTML = `
                 <!-- USER'S OWN PRIVATE VAULT -->
