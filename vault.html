@@ -143,7 +143,7 @@
                     </div>
                     
                     <div style="margin-top: 15px;">
-                        <input type="text" id="adminUserSearch" placeholder="Type name (e.g. suman, jiya)" style="width: 100%; padding: 10px; border-radius: 12px; border: 1px solid #ff9a9e; outline: none; margin-bottom: 10px; font-size: 14px; text-align: center;">
+                        <input type="text" id="adminUserSearch" placeholder="Type name (e.g. suman, nathasha)" style="width: 100%; padding: 10px; border-radius: 12px; border: 1px solid #ff9a9e; outline: none; margin-bottom: 10px; font-size: 14px; text-align: center;">
                         
                         <div style="display: flex; gap: 5px;">
                             <button class="cute-btn" onclick="openAdminGallery()" style="flex: 1; padding: 8px; margin: 0; font-size: 12px;">📸 Gallery (Upload)</button>
@@ -172,9 +172,11 @@
                 const targetUser = document.getElementById("adminUserSearch").value.toLowerCase().trim();
                 if(!targetUser) { alert("Pehle dabe mein naam likh bhai!"); return; }
                 
-                // Agar Suman hai toh uski special file open hogi, baaki sabke liye dynamic common file
+                // MAIN FIX YAHI PAR HAI ADMIN KE LIYE 👇
                 if(targetUser === "suman") {
                     window.location.href = "cutu26.html";
+                } else if(targetUser === "nathasha") {
+                    window.location.href = "Akkos26.html";
                 } else {
                     window.location.href = `birthday.html?folder=${targetUser}`;
                 }
@@ -188,7 +190,7 @@
             if(loggedInUser === "suman") { 
                 bdayPageLink = "cutu26.html"; 
             } else if(loggedInUser === "nathasha") {
-                // Yahan ensure kar ki file ka naam ekdum match ho
+                // NORMAL LOGIN FIX YAHAN HAI 👇
                 bdayPageLink = "Akkos26.html";
             }
 
