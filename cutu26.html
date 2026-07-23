@@ -152,6 +152,8 @@
 
         .flip-card-front, .flip-card-back {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             -webkit-backface-visibility: hidden;
@@ -160,6 +162,11 @@
             border: 5px solid #ffb6c1;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
+            -webkit-transform: translateZ(0); /* Safari bug fix */
+        }
+
+        .flip-card-front {
+            z-index: 2;
         }
 
         .flip-card-front img { width: 100%; height: 100%; object-fit: cover; }
@@ -167,12 +174,14 @@
         .flip-card-back {
             background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
             color: #4a4a4a;
-            transform: rotateY(180deg);
+            transform: rotateY(180deg) translateZ(1px); /* Safari bug fix */
+            -webkit-transform: rotateY(180deg) translateZ(1px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            z-index: 1;
         }
 
         .cute-btn {
@@ -266,10 +275,11 @@
             transform: rotateY(180deg);
         }
 
+        /* --- YAHAN HAIN SAFARI FIXES --- */
         .large-card-front, .large-card-back {
             position: absolute;
-            top: 0;  /* PHOTO KO BAHAR JANE SE ROKEGA */
-            left: 0; /* PHOTO KO BAHAR JANE SE ROKEGA */
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             -webkit-backface-visibility: hidden;
@@ -278,10 +288,11 @@
             border: 5px solid #ffb6c1;
             overflow: hidden;
             box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
+            -webkit-transform: translateZ(0); /* Bug Fix 1 */
         }
 
         .large-card-front {
-            z-index: 2; /* SAFARI TEXT BUG FIX */
+            z-index: 2; /* Bug Fix 2 */
         }
 
         .large-card-front img {
@@ -293,13 +304,14 @@
         .large-card-back {
             background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
             color: #4a4a4a;
-            transform: rotateY(180deg) translateZ(1px); /* SAFARI TEXT BUG FIX */
+            transform: rotateY(180deg) translateZ(1px); /* Bug Fix 3 */
+            -webkit-transform: rotateY(180deg) translateZ(1px);
             display: flex;
             flex-direction: column;
             padding: 25px;
             text-align: left;
             overflow-y: auto; 
-            z-index: 1; /* SAFARI TEXT BUG FIX */
+            z-index: 1; /* Bug Fix 4 */
         }
 
         .large-card-back h3 { color: #db7093; margin-bottom: 12px; font-size: 1.4rem; text-align: center;}
@@ -386,8 +398,8 @@
                     <div class="large-flip-card-inner">
                         
                         <div class="large-card-front">
-                            <img src="IMG_0237.PNG" alt="Custom Birthday Pic" class= " height: 420px; width: 320px">
-                        <div>
+                            <img src="IMG_0237.PNG" alt="Custom Birthday Pic">
+                        </div>
                         
                         <div class="large-card-back">
                             <h3>From Chinmay 🤗</h3>
