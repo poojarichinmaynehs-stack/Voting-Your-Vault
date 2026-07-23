@@ -89,19 +89,27 @@
             width: 100%; height: 100%; position: absolute; top: 0; left: 0;
             border-radius: 24px; border: 5px solid #ffb6c1; overflow: hidden;
             box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
-            transition: transform 0.3s ease-in-out; /* Magic flip animation yahan se aayegi */
+            transition: transform 0.3s ease-in-out; 
+            
+            /* -- YEH HAI SAFARI IMAGE CORNER FIX -- */
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
 
         /* Front Face (Photo) */
         .safari-front { background: white; cursor: pointer; }
-        .safari-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .safari-front img { 
+            width: 100%; height: 100%; object-fit: cover; display: block; 
+            border-radius: 19px; /* Inner border mask */
+        }
         .tap-hint { position: absolute; bottom: 15px; left: 0; width: 100%; text-align: center; color: white; font-weight: bold; text-shadow: 0px 2px 5px rgba(0,0,0,0.8); font-size: 15px; pointer-events: none; }
 
         /* Back Face (Text) */
         .safari-back { background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%); display: flex; flex-direction: column; }
         .close-flip-btn { position: absolute; top: 10px; right: 10px; background: rgba(255, 182, 193, 0.7); border: 2px solid white; border-radius: 50%; width: 32px; height: 32px; font-size: 14px; font-weight: bold; color: white; cursor: pointer; z-index: 10; }
         
-        /* SCROLL AREA (SAFARI MEIN MAKKHAN JAISE CHALEGA) */
+        /* SCROLL AREA */
         .scrollable-text { flex: 1; padding: 25px; padding-top: 35px; overflow-y: auto; -webkit-overflow-scrolling: touch; color: #4a4a4a; text-align: left; }
         .scrollable-text h3 { color: #db7093; margin-bottom: 15px; font-size: 1.4rem; text-align: center;}
         .scrollable-text p { font-size: 1rem; line-height: 1.6; font-weight: 500; margin-bottom: 15px; }
@@ -153,7 +161,6 @@
             <div class="center-action"><button class="cute-btn" onclick="revealSecretPanel()" id="masterActionBtn">Click Me 🌸</button></div>
         </div>
 
-        <!-- NEW SAFARI-SAFE CONTAINER (NO 3D BUGS) -->
         <div id="secretMessagePanel" class="secret-panel">
             <div class="glass-card" style="border: 2px dashed #ffb6c1;">
                 <h2 style="color: #ff69b4; margin-bottom: 5px;">The Ultimate Message 💌</h2>
@@ -167,7 +174,7 @@
                         <div class="tap-hint">Tap to open 💌</div>
                     </div>
                     
-                    <!-- BACK (TEXT - Hidden initially) -->
+                    <!-- BACK (TEXT) -->
                     <div id="backFace" class="safari-face safari-back" style="display: none; transform: scaleX(0);">
                         <button class="close-flip-btn" onclick="doFakeFlip('front')">✖</button>
                         
@@ -205,26 +212,26 @@
             setTimeout(() => { document.getElementById("secretMessagePanel").scrollIntoView({ behavior: 'smooth' }); }, 200);
         }
 
-        /* --- THE MAGIC FAKE FLIP LOGIC --- */
+        /* FAKE FLIP LOGIC */
         function doFakeFlip(direction) {
             const front = document.getElementById('frontFace');
             const back = document.getElementById('backFace');
             
             if (direction === 'back') {
-                front.style.transform = 'scaleX(0)'; // Photo pichak jayegi
+                front.style.transform = 'scaleX(0)'; 
                 setTimeout(() => {
                     front.style.display = 'none';
                     back.style.display = 'flex';
-                    void back.offsetWidth; // Force update
-                    back.style.transform = 'scaleX(1)'; // Text bada ho jayega
+                    void back.offsetWidth; 
+                    back.style.transform = 'scaleX(1)'; 
                 }, 300);
             } else {
-                back.style.transform = 'scaleX(0)'; // Text pichak jayega
+                back.style.transform = 'scaleX(0)'; 
                 setTimeout(() => {
                     back.style.display = 'none';
                     front.style.display = 'block';
-                    void front.offsetWidth; // Force update
-                    front.style.transform = 'scaleX(1)'; // Photo wapas aa jayegi
+                    void front.offsetWidth; 
+                    front.style.transform = 'scaleX(1)'; 
                 }, 300);
             }
         }
