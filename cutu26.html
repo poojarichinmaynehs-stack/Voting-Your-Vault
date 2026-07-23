@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Behena 🎂💖</title>
     
-    <!-- Yahan tera tab wala chhota logo hai -->
     <link rel="icon" type="image/jpeg" href="IMG_0239.jpeg">
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -162,19 +161,17 @@
             border: 5px solid #ffb6c1;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
-            -webkit-transform: translateZ(0); /* Safari bug fix */
+            -webkit-transform: translateZ(0); 
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
 
-        .flip-card-front {
-            z-index: 2;
-        }
-
+        .flip-card-front { z-index: 2; }
         .flip-card-front img { width: 100%; height: 100%; object-fit: cover; }
 
         .flip-card-back {
             background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
             color: #4a4a4a;
-            transform: rotateY(180deg) translateZ(1px); /* Safari bug fix */
+            transform: rotateY(180deg) translateZ(1px); 
             -webkit-transform: rotateY(180deg) translateZ(1px);
             display: flex;
             flex-direction: column;
@@ -241,7 +238,7 @@
 
         .center-action { position: relative; z-index: 20; }
 
-        /* --- 5. BADA FLIP CARD --- */
+        /* --- 5. BADA FLIP CARD (SAFARI FIXES ADDED) --- */
         .secret-panel {
             display: none;
             margin-top: 20px;
@@ -259,6 +256,7 @@
             height: 460px;
             margin: 30px auto;
             perspective: 1000px;
+            -webkit-perspective: 1000px;
             cursor: pointer;
         }
 
@@ -269,13 +267,15 @@
             text-align: center;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
         }
 
         .large-flip-card.flipped .large-flip-card-inner {
             transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
         }
 
-        /* --- YAHAN HAIN SAFARI FIXES --- */
+        /* YAHAN HAIN SAFARI IMAGE AUR SCROLL FIXES */
         .large-card-front, .large-card-back {
             position: absolute;
             top: 0;
@@ -286,13 +286,14 @@
             backface-visibility: hidden;
             border-radius: 24px;
             border: 5px solid #ffb6c1;
-            overflow: hidden;
             box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
-            -webkit-transform: translateZ(0); /* Bug Fix 1 */
+            -webkit-transform: translateZ(0); 
+            -webkit-mask-image: -webkit-radial-gradient(white, black); /* MAGIC APPLE FIX FOR BORDER-RADIUS */
         }
 
         .large-card-front {
-            z-index: 2; /* Bug Fix 2 */
+            z-index: 2;
+            background-color: white;
         }
 
         .large-card-front img {
@@ -304,18 +305,22 @@
         .large-card-back {
             background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
             color: #4a4a4a;
-            transform: rotateY(180deg) translateZ(1px); /* Bug Fix 3 */
+            transform: rotateY(180deg) translateZ(1px); 
             -webkit-transform: rotateY(180deg) translateZ(1px);
             display: flex;
             flex-direction: column;
             padding: 25px;
             text-align: left;
+            z-index: 1;
+            
+            /* SCROLL FIXES FOR iOS */
             overflow-y: auto; 
-            z-index: 1; /* Bug Fix 4 */
+            -webkit-overflow-scrolling: touch; 
+            pointer-events: auto;
         }
 
-        .large-card-back h3 { color: #db7093; margin-bottom: 12px; font-size: 1.4rem; text-align: center;}
-        .large-card-back p { font-size: 1rem; line-height: 1.7; font-weight: 500; margin-bottom: 12px; }
+        .large-card-back h3 { color: #db7093; margin-bottom: 15px; font-size: 1.4rem; text-align: center;}
+        .large-card-back p { font-size: 1rem; line-height: 1.6; font-weight: 500; margin-bottom: 12px; }
 
         /* --- 6. COMMENT SECTION --- */
         .comment-section { text-align: left; }
@@ -339,12 +344,10 @@
 </head>
 <body>
 
-    <!-- 1. INTRO SCREEN -->
     <div class="intro-overlay">
         <h1 class="elegant-title">Happy Birthday Behena... ✨</h1>
     </div>
 
-    <!-- 2. PENGUINS & HEARTS -->
     <div class="side-animation left-side">
         <div class="penguin-container">🐧<div class="floating-heart" style="animation-delay: 0s;">💖</div></div>
         <div class="penguin-container" style="animation-delay: 0.5s;">🐧<div class="floating-heart" style="animation-delay: 1s;">❤️</div></div>
@@ -358,7 +361,6 @@
 
     <div class="main-wrapper">
         
-        <!-- ROUND INITIAL SURPRISE CARD -->
         <div class="glass-card">
             <h1 style="color: #db7093; font-weight: 600;">Suman's Day ✨</h1>
             <p style="font-size: 14px; color: #888; margin-top: 5px;">Click the card to open the first surprise</p>
@@ -376,7 +378,6 @@
             </div>
         </div>
 
-        <!-- COLLAGE SECTION -->
         <div class="collage-section">
             <img src="IMG_0232.PNG" class="collage-img img-1" alt="Memory 1">
             <img src="IMG_0233.PNG" class="collage-img img-2" alt="Memory 2">
@@ -388,7 +389,7 @@
             </div>
         </div>
 
-        <!-- BADA DYNAMIC FLIP CARD -->
+        <!-- YAHAN TERA NAYA DIL CHHU LENE WALA MESSAGE HAI -->
         <div id="secretMessagePanel" class="secret-panel">
             <div class="glass-card" style="border: 2px dashed #ffb6c1;">
                 <h2 style="color: #ff69b4; margin-bottom: 5px;">The Ultimate Message 💌</h2>
@@ -402,13 +403,14 @@
                         </div>
                         
                         <div class="large-card-back">
-                            <h3>From Chinmay 🤗</h3>
-                            <br>
-                            <p>Dearest Suman,</p>
-                            <p>You are not just my sister, you are my ultimate crime partner! Thank you for always saving me from all the blunders.</p>
-                            <p>Chahe hum kitna bhi ladhein, at the end of the day, I know you always have my back. This year is going to be super special for you, and I can't wait to see you achieve everything you want.</p>
-                            <p>Remember that trip we took? Or the times we stayed up late talking? Those are the memories I'm storing in this vault forever. Let's make 2026 epic, full of joy, and less of me annoying you (maybe)!</p>
-                            <p>Enjoy your day to the absolute fullest because you deserve the world! Happy Birthday Behena! 💖✨</p>
+                            <h3>Dearest Suman, 🌸</h3>
+                            <p>Happy Birthday meri cute behena! 🎂💖 Aaj tere is special din par ekdum dil se yeh message likh raha hoon.</p>
+                            <p>Yaar, kitni cute hai tu! Sachi batau toh poori class mein tu hi sabse pyari aur adorable lagti hai. 🥺 Tere paas aake ek alag hi 'apnepan' wali feeling aati hai, jaise ekdum apne ghar wali vibe milti hai.</p>
+                            <p>Kabhi kabhi lagta hai, kaash tu meri sagi behen hoti! Kasam se, bohot laad karta tera, ekdum Rani jaisa rakhta aur tujhe duniya bhar ka pamper karta. 👑✨ Tu jo mangti, tera bhai tere liye hazir kar deta.</p>
+                            <p>I really, really don't wanna lose you yaar... please stay with me forever. 🤞💕 Life mein chahe kuch bhi ho, promise kar ki tu hamesha mere paas rahegi.</p>
+                            <p>Aur tera cuteness na, uff! Ekdum pyari si rabbit 🐰 jaisi dikhti hai tu. Jab bhi tujhe dekhta hoon, sach mein mann karta hai aake bohot tight wala hug hi karlu! 🤗</p>
+                            <p>I love you sooo much, meri pyari behena! 💖 Hamesha aisi hi muskurati reh. Tera bhai hamesha tere saath hai. Happy Birthday again! ✨🎂</p>
+                            <br><br>
                         </div>
 
                     </div>
@@ -416,7 +418,6 @@
             </div>
         </div>
 
-        <!-- REVIEWS/COMMENTS -->
         <div class="glass-card comment-section">
             <h3 style="color: #db7093; text-align: center; margin-bottom: 15px;">Leave Your Birthday Review/Wish 💬</h3>
             <textarea id="reviewText" class="comment-input" placeholder="Write something sweet about this page..."></textarea>
