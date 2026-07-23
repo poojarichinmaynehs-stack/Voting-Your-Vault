@@ -28,28 +28,19 @@
         /* --- 1. INTRO SCREEN --- */
         .intro-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #ffb6c1, #ffc0cb, #e6e6fa);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             z-index: 9999;
             animation: fadeOutScreen 4.5s forwards;
             pointer-events: none;
         }
 
         .elegant-title {
-            font-size: 3rem;
-            font-weight: 300;
-            color: #fff;
-            font-family: 'Georgia', serif;
-            font-style: italic;
+            font-size: 3rem; font-weight: 300; color: #fff;
+            font-family: 'Georgia', serif; font-style: italic;
             text-shadow: 0 4px 15px rgba(218, 112, 214, 0.4);
-            opacity: 0;
-            animation: fadeInOutText 4s forwards;
+            opacity: 0; animation: fadeInOutText 4s forwards;
         }
 
         @keyframes fadeInOutText {
@@ -66,264 +57,148 @@
 
         /* --- 2. PENGUINS & HEARTS --- */
         .side-animation {
-            position: fixed;
-            top: 0;
-            width: 120px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 5;
-            pointer-events: none;
+            position: fixed; top: 0; width: 120px; height: 100vh;
+            display: flex; flex-direction: column; justify-content: space-around;
+            align-items: center; z-index: 5; pointer-events: none;
         }
 
         .left-side { left: 10px; }
         .right-side { right: 10px; }
 
         .penguin-container {
-            font-size: 40px;
-            position: relative;
+            font-size: 40px; position: relative;
             animation: bounce 2s infinite alternate ease-in-out;
         }
 
         .floating-heart {
-            position: absolute;
-            font-size: 20px;
-            opacity: 0;
+            position: absolute; font-size: 20px; opacity: 0;
             animation: floatHeartUp 3s infinite linear;
         }
 
-        @keyframes bounce {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-15px); }
-        }
-
-        @keyframes floatHeartUp {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
-        }
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
+        @keyframes floatHeartUp { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-80px) scale(1.2); opacity: 0; } }
 
         /* --- MAIN WRAPPER & GLASS CARDS --- */
-        .main-wrapper {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 10;
-        }
+        .main-wrapper { max-width: 700px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 30px;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px; padding: 30px;
             box-shadow: 0 15px 35px rgba(255, 182, 193, 0.3), inset 0 0 0 1px rgba(255,255,255,0.7);
-            text-align: center;
-            margin-top: 40px;
-            margin-bottom: 40px;
+            text-align: center; margin-top: 40px; margin-bottom: 40px;
         }
 
         /* --- 3. FIRST CARD (Round) --- */
         .flip-card {
-            background-color: transparent;
-            width: 260px;
-            height: 260px;
-            margin: 30px auto;
-            perspective: 1000px;
-            cursor: pointer;
+            background-color: transparent; width: 260px; height: 260px;
+            margin: 30px auto; perspective: 1000px; cursor: pointer;
         }
-
         .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
+            position: relative; width: 100%; height: 100%; text-align: center;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
         }
-
-        .flip-card.flipped .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
         .flip-card-front, .flip-card-back {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 50%;
-            border: 5px solid #ffb6c1;
-            overflow: hidden;
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 50%; border: 5px solid #ffb6c1; overflow: hidden;
             box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
-            -webkit-transform: translateZ(0); 
         }
-
         .flip-card-front { z-index: 2; }
         .flip-card-front img { width: 100%; height: 100%; object-fit: cover; }
-
         .flip-card-back {
             background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
-            color: #4a4a4a;
-            transform: rotateY(180deg) translateZ(1px); 
-            -webkit-transform: rotateY(180deg) translateZ(1px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 1;
+            color: #4a4a4a; transform: rotateY(180deg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; z-index: 1;
         }
 
         .cute-btn {
-            background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%);
-            color: white;
-            border: none;
-            padding: 14px 35px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3);
-            transition: all 0.3s ease;
-            margin-top: 15px;
+            background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%); color: white;
+            border: none; padding: 14px 35px; font-size: 16px; font-weight: bold;
+            border-radius: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3);
+            transition: all 0.3s ease; margin-top: 15px;
         }
-
-        .cute-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(244, 63, 94, 0.5);
-        }
+        .cute-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(244, 63, 94, 0.5); }
 
         /* --- 4. COLLAGE SECTION --- */
         .collage-section {
-            position: relative;
-            height: 400px;
-            margin: 40px 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 24px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.02);
+            position: relative; height: 400px; margin: 40px 0; background: rgba(255, 255, 255, 0.3);
+            border-radius: 24px; overflow: hidden; display: flex; justify-content: center; align-items: center;
         }
-
         .collage-img {
-            position: absolute;
-            width: 130px;
-            height: 130px;
-            object-fit: cover;
-            border-radius: 16px;
-            border: 3px solid white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            opacity: 0.2;
-            animation: randomFade 6s infinite ease-in-out;
+            position: absolute; width: 130px; height: 130px; object-fit: cover;
+            border-radius: 16px; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            opacity: 0.2; animation: randomFade 6s infinite ease-in-out;
         }
-
-        .img-1 { top: 15%; left: 10%; animation-delay: 0s; }
-        .img-2 { top: 10%; right: 12%; animation-delay: 1.5s; }
-        .img-3 { bottom: 15%; left: 8%; animation-delay: 3s; }
-        .img-4 { bottom: 12%; right: 10%; animation-delay: 4.5s; }
-
-        @keyframes randomFade {
-            0%, 100% { opacity: 0.1; transform: scale(0.95); }
-            50% { opacity: 0.9; transform: scale(1.05); }
-        }
-
+        .img-1 { top: 15%; left: 10%; animation-delay: 0s; } .img-2 { top: 10%; right: 12%; animation-delay: 1.5s; }
+        .img-3 { bottom: 15%; left: 8%; animation-delay: 3s; } .img-4 { bottom: 12%; right: 10%; animation-delay: 4.5s; }
+        @keyframes randomFade { 0%, 100% { opacity: 0.1; transform: scale(0.95); } 50% { opacity: 0.9; transform: scale(1.05); } }
         .center-action { position: relative; z-index: 20; }
 
-        /* --- 5. BADA FLIP CARD (ULTIMATE SAFARI FIX) --- */
-        .secret-panel {
-            display: none;
-            margin-top: 20px;
-            animation: fadeIn 1s ease forwards;
-        }
+        /* --- 5. BADA FLIP CARD (NEW BULLETPROOF FIX) --- */
+        .secret-panel { display: none; margin-top: 20px; animation: fadeIn 1s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Naye Class Names jisse Cache toot jaye */
-        .suman-flip-box {
-            background-color: transparent;
-            width: 320px;
-            height: 460px;
-            margin: 30px auto;
-            perspective: 1200px;
-            -webkit-perspective: 1200px;
-            cursor: pointer;
+        .suman-card-container {
+            width: 320px; height: 460px; margin: 30px auto; position: relative; perspective: 1200px;
         }
-
-        .suman-flip-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
+        
+        .suman-card-inner {
+            width: 100%; height: 100%; position: relative;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
-            -webkit-transform-style: preserve-3d;
         }
+        
+        .suman-card-container.flipped .suman-card-inner { transform: rotateY(180deg); }
 
-        .suman-flip-box.flipped .suman-flip-inner {
-            transform: rotateY(180deg);
-            -webkit-transform: rotateY(180deg);
-        }
-
-        .suman-face-front, .suman-face-back {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 24px;
-            border: 5px solid #ffb6c1;
-            /* Hardware Acceleration - Isse photo border ke bahar nahi aayegi */
-            transform: translate3d(0,0,0);
-            -webkit-transform: translate3d(0,0,0);
-            overflow: hidden;
+        .suman-card-front, .suman-card-back {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 24px; border: 5px solid #ffb6c1;
             box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
         }
 
-        .suman-face-front {
-            background-color: white;
-            z-index: 2;
+        /* FRONT IMAGE FIX */
+        .suman-card-front { background-color: white; z-index: 2; cursor: pointer; }
+        .suman-card-front img {
+            width: 100%; height: 100%; object-fit: cover;
+            border-radius: 19px; /* Yeh hai image ko box ke andar lock rakhne ka raaz */
+            display: block;
+        }
+        .tap-hint {
+            position: absolute; bottom: 15px; left: 0; width: 100%;
+            text-align: center; color: white; font-weight: bold;
+            text-shadow: 0px 2px 5px rgba(0,0,0,0.8); font-size: 15px;
+            pointer-events: none;
         }
 
-        .suman-face-front img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 19px; /* Border ke andar exact fit karne ke liye */
-        }
-
-        .suman-face-back {
+        /* BACK SCROLL FIX */
+        .suman-card-back {
             background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
-            color: #4a4a4a;
-            transform: rotateY(180deg) translate3d(0,0,1px); 
-            -webkit-transform: rotateY(180deg) translate3d(0,0,1px);
-            
-            /* Scroll Block Fix - Safari ke liye flex hata diya */
-            display: block; 
-            padding: 25px;
-            text-align: left;
-            z-index: 1;
-            
-            /* iOS Scroll Force */
-            overflow-y: scroll; 
-            -webkit-overflow-scrolling: touch; 
+            transform: rotateY(180deg); z-index: 1; display: flex; flex-direction: column;
+            border-radius: 24px;
         }
-
-        .suman-face-back h3 { color: #db7093; margin-bottom: 15px; font-size: 1.4rem; text-align: center; margin-top: 10px;}
-        .suman-face-back p { font-size: 1rem; line-height: 1.6; font-weight: 500; margin-bottom: 15px; }
+        .suman-scroll-area {
+            flex: 1; padding: 25px; padding-top: 35px;
+            overflow-y: auto; -webkit-overflow-scrolling: touch; color: #4a4a4a; text-align: left;
+        }
+        .close-flip-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(255, 182, 193, 0.5); border: 2px solid white; border-radius: 50%;
+            width: 32px; height: 32px; font-size: 14px; font-weight: bold; color: white;
+            cursor: pointer; z-index: 10;
+        }
+        .suman-scroll-area h3 { color: #db7093; margin-bottom: 15px; font-size: 1.4rem; text-align: center;}
+        .suman-scroll-area p { font-size: 1rem; line-height: 1.6; font-weight: 500; margin-bottom: 15px; }
 
         /* --- 6. COMMENT SECTION --- */
         .comment-section { text-align: left; }
         .comment-input {
-            width: 100%; height: 100px; padding: 15px; border-radius: 16px;
-            border: 2px solid #ffb6c1; outline: none; resize: none;
-            background: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 15px;
+            width: 100%; height: 100px; padding: 15px; border-radius: 16px; border: 2px solid #ffb6c1;
+            outline: none; resize: none; background: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 15px;
         }
         .comment-input:focus { border-color: #ff69b4; box-shadow: 0 0 10px rgba(255, 105, 180, 0.2); }
         .reviews-display { margin-top: 20px; max-height: 200px; overflow-y: auto; }
@@ -385,28 +260,34 @@
             </div>
         </div>
 
-        <!-- NEW CLASS NAMES FOR SAFARI CACHE BYPASS -->
+        <!-- NEW BULLETPROOF HTML STRUCTURE -->
         <div id="secretMessagePanel" class="secret-panel">
             <div class="glass-card" style="border: 2px dashed #ffb6c1;">
                 <h2 style="color: #ff69b4; margin-bottom: 5px;">The Ultimate Message 💌</h2>
-                <p style="font-size: 13px; color: #777; margin-bottom: 15px;">Tap the card below to read my letter!</p>
+                <p style="font-size: 13px; color: #777; margin-bottom: 15px;">Read my letter below!</p>
                 
-                <div class="suman-flip-box" onclick="this.classList.toggle('flipped')">
-                    <div class="suman-flip-inner">
+                <div id="badaCard" class="suman-card-container">
+                    <div class="suman-card-inner">
                         
-                        <div class="suman-face-front">
+                        <!-- FRONT (Clicking here flips it) -->
+                        <div class="suman-card-front" onclick="document.getElementById('badaCard').classList.add('flipped')">
                             <img src="IMG_0237.PNG" alt="Custom Birthday Pic">
+                            <div class="tap-hint">Tap to open 💌</div>
                         </div>
                         
-                        <div class="suman-face-back">
-                            <h3>Dearest Suman, 🌸</h3>
-                            <p>Happy Birthday meri cute behena! 🎂💖 Aaj tere is special din par ekdum dil se yeh message likh raha hoon.</p>
-                            <p>Yaar, kitni cute hai tu! Sachi batau toh poori class mein tu hi sabse pyari aur adorable lagti hai. 🥺 Tere paas aake ek alag hi 'apnepan' wali feeling aati hai, jaise ekdum apne ghar wali vibe milti hai.</p>
-                            <p>Kabhi kabhi lagta hai, kaash tu meri sagi behen hoti! Kasam se, bohot laad karta tera, ekdum Rani jaisa rakhta aur tujhe duniya bhar ka pamper karta. 👑✨ Tu jo mangti, tera bhai tere liye hazir kar deta.</p>
-                            <p>I really, really don't wanna lose you yaar... please stay with me forever. 🤞💕 Life mein chahe kuch bhi ho, promise kar ki tu hamesha mere paas rahegi.</p>
-                            <p>Aur tera cuteness na, uff! Ekdum pyari si rabbit 🐰 jaisi dikhti hai tu. Jab bhi tujhe dekhta hoon, sach mein mann karta hai aake bohot tight wala hug hi karlu! 🤗</p>
-                            <p>I love you sooo much, meri pyari behena! 💖 Hamesha aisi hi muskurati reh. Tera bhai hamesha tere saath hai. Happy Birthday again! ✨🎂</p>
-                            <br> <!-- Extra space at bottom for scrolling comfortably -->
+                        <!-- BACK (Clicking 'X' flips it back, freely scroll text) -->
+                        <div class="suman-card-back">
+                            <button class="close-flip-btn" onclick="document.getElementById('badaCard').classList.remove('flipped')">✖</button>
+                            
+                            <div class="suman-scroll-area">
+                                <h3>Dearest Suman, 🌸</h3>
+                                <p>Happy Birthday meri cute behena! 🎂💖 Aaj tere is special din par ekdum dil se yeh message likh raha hoon.</p>
+                                <p>Yaar, kitni cute hai tu! Sachi batau toh poori class mein tu hi sabse pyari aur adorable lagti hai. 🥺 Tere paas aake ek alag hi 'apnepan' wali feeling aati hai, jaise ekdum apne ghar wali vibe milti hai.</p>
+                                <p>Kabhi kabhi lagta hai, kaash tu meri sagi behen hoti! Kasam se, bohot laad karta tera, ekdum Rani jaisa rakhta aur tujhe duniya bhar ka pamper karta. 👑✨ Tu jo mangti, tera bhai tere liye hazir kar deta.</p>
+                                <p>I really, really don't wanna lose you yaar... please stay with me forever. 🤞💕 Life mein chahe kuch bhi ho, promise kar ki tu hamesha mere paas rahegi.</p>
+                                <p>Aur tera cuteness na, uff! Ekdum pyari si rabbit 🐰 jaisi dikhti hai tu. Jab bhi tujhe dekhta hoon, sach mein mann karta hai aake bohot tight wala hug hi karlu! 🤗</p>
+                                <p>I love you sooo much, meri pyari behena! 💖 Hamesha aisi hi muskurati reh. Tera bhai hamesha tere saath hai. Happy Birthday again! ✨🎂</p>
+                            </div>
                         </div>
 
                     </div>
