@@ -162,7 +162,6 @@
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
             -webkit-transform: translateZ(0); 
-            -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
 
         .flip-card-front { z-index: 2; }
@@ -238,29 +237,25 @@
 
         .center-action { position: relative; z-index: 20; }
 
-        /* --- 5. BADA FLIP CARD (SAFARI FIXES ADDED) --- */
+        /* --- 5. BADA FLIP CARD (ULTIMATE SAFARI FIX) --- */
         .secret-panel {
             display: none;
             margin-top: 20px;
             animation: fadeIn 1s ease forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .large-flip-card {
+        /* Naye Class Names jisse Cache toot jaye */
+        .suman-flip-box {
             background-color: transparent;
             width: 320px;
             height: 460px;
             margin: 30px auto;
-            perspective: 1000px;
-            -webkit-perspective: 1000px;
+            perspective: 1200px;
+            -webkit-perspective: 1200px;
             cursor: pointer;
         }
 
-        .large-flip-card-inner {
+        .suman-flip-inner {
             position: relative;
             width: 100%;
             height: 100%;
@@ -270,57 +265,58 @@
             -webkit-transform-style: preserve-3d;
         }
 
-        .large-flip-card.flipped .large-flip-card-inner {
+        .suman-flip-box.flipped .suman-flip-inner {
             transform: rotateY(180deg);
             -webkit-transform: rotateY(180deg);
         }
 
-        /* YAHAN HAIN SAFARI IMAGE AUR SCROLL FIXES */
-        .large-card-front, .large-card-back {
+        .suman-face-front, .suman-face-back {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             width: 100%;
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             border-radius: 24px;
             border: 5px solid #ffb6c1;
+            /* Hardware Acceleration - Isse photo border ke bahar nahi aayegi */
+            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0,0,0);
+            overflow: hidden;
             box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
-            -webkit-transform: translateZ(0); 
-            -webkit-mask-image: -webkit-radial-gradient(white, black); /* MAGIC APPLE FIX FOR BORDER-RADIUS */
         }
 
-        .large-card-front {
-            z-index: 2;
+        .suman-face-front {
             background-color: white;
+            z-index: 2;
         }
 
-        .large-card-front img {
+        .suman-face-front img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 19px; /* Border ke andar exact fit karne ke liye */
         }
 
-        .large-card-back {
+        .suman-face-back {
             background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
             color: #4a4a4a;
-            transform: rotateY(180deg) translateZ(1px); 
-            -webkit-transform: rotateY(180deg) translateZ(1px);
-            display: flex;
-            flex-direction: column;
+            transform: rotateY(180deg) translate3d(0,0,1px); 
+            -webkit-transform: rotateY(180deg) translate3d(0,0,1px);
+            
+            /* Scroll Block Fix - Safari ke liye flex hata diya */
+            display: block; 
             padding: 25px;
             text-align: left;
             z-index: 1;
             
-            /* SCROLL FIXES FOR iOS */
-            overflow-y: auto; 
+            /* iOS Scroll Force */
+            overflow-y: scroll; 
             -webkit-overflow-scrolling: touch; 
-            pointer-events: auto;
         }
 
-        .large-card-back h3 { color: #db7093; margin-bottom: 15px; font-size: 1.4rem; text-align: center;}
-        .large-card-back p { font-size: 1rem; line-height: 1.6; font-weight: 500; margin-bottom: 12px; }
+        .suman-face-back h3 { color: #db7093; margin-bottom: 15px; font-size: 1.4rem; text-align: center; margin-top: 10px;}
+        .suman-face-back p { font-size: 1rem; line-height: 1.6; font-weight: 500; margin-bottom: 15px; }
 
         /* --- 6. COMMENT SECTION --- */
         .comment-section { text-align: left; }
@@ -389,20 +385,20 @@
             </div>
         </div>
 
-        <!-- YAHAN TERA NAYA DIL CHHU LENE WALA MESSAGE HAI -->
+        <!-- NEW CLASS NAMES FOR SAFARI CACHE BYPASS -->
         <div id="secretMessagePanel" class="secret-panel">
             <div class="glass-card" style="border: 2px dashed #ffb6c1;">
                 <h2 style="color: #ff69b4; margin-bottom: 5px;">The Ultimate Message 💌</h2>
                 <p style="font-size: 13px; color: #777; margin-bottom: 15px;">Tap the card below to read my letter!</p>
                 
-                <div class="large-flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="large-flip-card-inner">
+                <div class="suman-flip-box" onclick="this.classList.toggle('flipped')">
+                    <div class="suman-flip-inner">
                         
-                        <div class="large-card-front">
+                        <div class="suman-face-front">
                             <img src="IMG_0237.PNG" alt="Custom Birthday Pic">
                         </div>
                         
-                        <div class="large-card-back">
+                        <div class="suman-face-back">
                             <h3>Dearest Suman, 🌸</h3>
                             <p>Happy Birthday meri cute behena! 🎂💖 Aaj tere is special din par ekdum dil se yeh message likh raha hoon.</p>
                             <p>Yaar, kitni cute hai tu! Sachi batau toh poori class mein tu hi sabse pyari aur adorable lagti hai. 🥺 Tere paas aake ek alag hi 'apnepan' wali feeling aati hai, jaise ekdum apne ghar wali vibe milti hai.</p>
@@ -410,7 +406,7 @@
                             <p>I really, really don't wanna lose you yaar... please stay with me forever. 🤞💕 Life mein chahe kuch bhi ho, promise kar ki tu hamesha mere paas rahegi.</p>
                             <p>Aur tera cuteness na, uff! Ekdum pyari si rabbit 🐰 jaisi dikhti hai tu. Jab bhi tujhe dekhta hoon, sach mein mann karta hai aake bohot tight wala hug hi karlu! 🤗</p>
                             <p>I love you sooo much, meri pyari behena! 💖 Hamesha aisi hi muskurati reh. Tera bhai hamesha tere saath hai. Happy Birthday again! ✨🎂</p>
-                            <br><br>
+                            <br> <!-- Extra space at bottom for scrolling comfortably -->
                         </div>
 
                     </div>
