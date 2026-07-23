@@ -59,22 +59,21 @@
 
         /* --- 3. FIRST CARD (Round) --- */
         .flip-card { background-color: transparent; width: 260px; height: 260px; margin: 30px auto; perspective: 1000px; cursor: pointer; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.8s; transform-style: preserve-3d; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.8s; transform-style: preserve-3d; will-change: transform; }
         .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back {
-            position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 50%; border: 5px solid #ffb6c1; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
-        }
         
-        /* GOL PHOTO KA BACKGROUND TRICK */
-        .flip-card-front { 
-            z-index: 2; 
-            background-image: url('IMG_0239.jpeg'); 
-            background-size: cover; 
-            background-position: center; 
+        .flip-wrapper-front, .flip-wrapper-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+        .flip-wrapper-front { z-index: 2; }
+        .flip-wrapper-back { transform: rotateY(180deg); z-index: 1; }
+
+        .round-face {
+            width: 100%; height: 100%; border-radius: 50%; border: 5px solid #ffb6c1; overflow: hidden; 
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
+            transform: translateZ(0); -webkit-transform: translateZ(0);
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
-        
-        .flip-card-back { background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%); transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; z-index: 1; }
+        .round-front-bg { background: url('IMG_0239.jpeg') center/cover; }
+        .round-back-bg { background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
 
         .cute-btn { background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%); color: white; border: none; padding: 14px 35px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.3); transition: all 0.3s; margin-top: 15px; }
         .cute-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(244, 63, 94, 0.5); }
@@ -86,34 +85,32 @@
         @keyframes randomFade { 0%, 100% { opacity: 0.1; transform: scale(0.95); } 50% { opacity: 0.9; transform: scale(1.05); } }
         .center-action { position: relative; z-index: 20; }
 
-        /* --- 5. BADA CARD (THE FAKE 2D FLIP - BACKGROUND IMAGE FIX) --- */
+        /* --- 5. BADA CARD (THE FAKE 2D FLIP - THE ULTIMATE SAFARI FIX) --- */
         .secret-panel { display: none; margin-top: 20px; animation: fadeIn 1s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .safari-safe-container { width: 320px; height: 460px; margin: 30px auto; position: relative; }
         
-        .safari-face {
+        /* The Animator Box - Yeh Move Hoga (Koi Borders Nahi) */
+        .animator-box {
             width: 100%; height: 100%; position: absolute; top: 0; left: 0;
-            border-radius: 24px; border: 5px solid #ffb6c1; 
+            transition: transform 0.3s ease-in-out;
+            will-change: transform; /* Safari ko force karta hai smooth rendering ke liye */
+        }
+
+        /* The Clipping Face - Yahan Sirf Borders Aur Photo Hogi */
+        .safari-face {
+            width: 100%; height: 100%; border-radius: 24px; border: 5px solid #ffb6c1; overflow: hidden;
             box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
-            transition: transform 0.3s ease-in-out; 
+            transform: translateZ(0); -webkit-transform: translateZ(0);
             -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
 
-        /* BADI PHOTO KA BACKGROUND TRICK */
-        .safari-front { 
-            background-color: white; 
-            cursor: pointer; 
-            background-image: url('IMG_0237.PNG'); 
-            background-size: cover; 
-            background-position: center; 
-        }
+        .safari-front { background: url('IMG_0237.PNG') center/cover; cursor: pointer; position: relative; }
+        .safari-back { background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%); display: flex; flex-direction: column; position: relative; }
         
         .tap-hint { position: absolute; bottom: 15px; left: 0; width: 100%; text-align: center; color: white; font-weight: bold; text-shadow: 0px 2px 5px rgba(0,0,0,0.8); font-size: 15px; pointer-events: none; }
-
-        /* Back Face (Text) */
-        .safari-back { background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%); display: flex; flex-direction: column; }
-        .close-flip-btn { position: absolute; top: 10px; right: 10px; background: rgba(255, 182, 193, 0.7); border: 2px solid white; border-radius: 50%; width: 32px; height: 32px; font-size: 14px; font-weight: bold; color: white; cursor: pointer; z-index: 10; }
+        .close-flip-btn { position: absolute; top: 10px; right: 10px; background: rgba(255, 182, 193, 0.9); border: 2px solid white; border-radius: 50%; width: 32px; height: 32px; font-size: 14px; font-weight: bold; color: white; cursor: pointer; z-index: 10; }
         
         /* SCROLL AREA */
         .scrollable-text { flex: 1; padding: 25px; padding-top: 35px; overflow-y: auto; -webkit-overflow-scrolling: touch; color: #4a4a4a; text-align: left; }
@@ -148,14 +145,17 @@
             <h1 style="color: #db7093; font-weight: 600;">Suman's Day ✨</h1>
             <p style="font-size: 14px; color: #888; margin-top: 5px;">Click the card to open the first surprise</p>
 
+            <!-- GOL CARD (SEPARATED ARCHITECTURE) -->
             <div class="flip-card" onclick="this.classList.toggle('flipped')">
                 <div class="flip-card-inner">
-                    <!-- GOL PHOTO BINA IMG TAG KE -->
-                    <div class="flip-card-front"></div>
-                    
-                    <div class="flip-card-back">
-                        <h3>Happy Birthday! 🎂</h3>
-                        <p>To the most incredible sister. May this year bring you endless laughs and fulfillment! Let's make every moment memorable. ✨</p>
+                    <div class="flip-wrapper-front">
+                        <div class="round-face round-front-bg"></div>
+                    </div>
+                    <div class="flip-wrapper-back">
+                        <div class="round-face round-back-bg">
+                            <h3>Happy Birthday! 🎂</h3>
+                            <p>To the most incredible sister. May this year bring you endless laughs and fulfillment! Let's make every moment memorable. ✨</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,24 +176,28 @@
                 
                 <div class="safari-safe-container">
                     
-                    <!-- FRONT BADI PHOTO BINA IMG TAG KE -->
-                    <div id="frontFace" class="safari-face safari-front" onclick="doFakeFlip('back')">
-                        <div class="tap-hint">Tap to open 💌</div>
+                    <!-- FRONT ANIMATOR -->
+                    <div id="frontFace" class="animator-box" onclick="doFakeFlip('back')">
+                        <div class="safari-face safari-front">
+                            <div class="tap-hint">Tap to open 💌</div>
+                        </div>
                     </div>
                     
-                    <!-- BACK (TEXT) -->
-                    <div id="backFace" class="safari-face safari-back" style="display: none; transform: scaleX(0);">
-                        <button class="close-flip-btn" onclick="doFakeFlip('front')">✖</button>
-                        
-                        <div class="scrollable-text">
-                            <h3>Dearest Suman, 🌸</h3>
-                            <p>Happy Birthday meri cute behena! 🎂💖 Aaj tere is special din par ekdum dil se yeh message likh raha hoon.</p>
-                            <p>Yaar, kitni cute hai tu! Sachi batau toh poori class mein tu hi sabse pyari aur adorable lagti hai. 🥺 Tere paas aake ek alag hi 'apnepan' wali feeling aati hai, jaise ekdum apne ghar wali vibe milti hai.</p>
-                            <p>Kabhi kabhi lagta hai, kaash tu meri sagi behen hoti! Kasam se, bohot laad karta tera, ekdum Rani jaisa rakhta aur tujhe duniya bhar ka pamper karta. 👑✨ Tu jo mangti, tera bhai tere liye hazir kar deta.</p>
-                            <p>I really, really don't wanna lose you yaar... please stay with me forever. 🤞💕 Life mein chahe kuch bhi ho, promise kar ki tu hamesha mere paas rahegi.</p>
-                            <p>Aur tera cuteness na, uff! Ekdum pyari si rabbit 🐰 jaisi dikhti hai tu. Jab bhi tujhe dekhta hoon, sach mein mann karta hai aake bohot tight wala hug hi karlu! 🤗</p>
-                            <p>I love you sooo much, meri pyari behena! 💖 Hamesha aisi hi muskurati reh. Tera bhai hamesha tere saath hai. Happy Birthday again! ✨🎂</p>
-                            <br>
+                    <!-- BACK ANIMATOR -->
+                    <div id="backFace" class="animator-box" style="display: none; transform: scaleX(0);">
+                        <div class="safari-face safari-back">
+                            <button class="close-flip-btn" onclick="doFakeFlip('front')">✖</button>
+                            
+                            <div class="scrollable-text">
+                                <h3>Dearest Suman, 🌸</h3>
+                                <p>Happy Birthday meri cute behena! 🎂💖 Aaj tere is special din par ekdum dil se yeh message likh raha hoon.</p>
+                                <p>Yaar, kitni cute hai tu! Sachi batau toh poori class mein tu hi sabse pyari aur adorable lagti hai. 🥺 Tere paas aake ek alag hi 'apnepan' wali feeling aati hai, jaise ekdum apne ghar wali vibe milti hai.</p>
+                                <p>Kabhi kabhi lagta hai, kaash tu meri sagi behen hoti! Kasam se, bohot laad karta tera, ekdum Rani jaisa rakhta aur tujhe duniya bhar ka pamper karta. 👑✨ Tu jo mangti, tera bhai tere liye hazir kar deta.</p>
+                                <p>I really, really don't wanna lose you yaar... please stay with me forever. 🤞💕 Life mein chahe kuch bhi ho, promise kar ki tu hamesha mere paas rahegi.</p>
+                                <p>Aur tera cuteness na, uff! Ekdum pyari si rabbit 🐰 jaisi dikhti hai tu. Jab bhi tujhe dekhta hoon, sach mein mann karta hai aake bohot tight wala hug hi karlu! 🤗</p>
+                                <p>I love you sooo much, meri pyari behena! 💖 Hamesha aisi hi muskurati reh. Tera bhai hamesha tere saath hai. Happy Birthday again! ✨🎂</p>
+                                <br>
+                            </div>
                         </div>
                     </div>
 
@@ -228,7 +232,7 @@
                 front.style.transform = 'scaleX(0)'; 
                 setTimeout(() => {
                     front.style.display = 'none';
-                    back.style.display = 'flex';
+                    back.style.display = 'block';
                     void back.offsetWidth; 
                     back.style.transform = 'scaleX(1)'; 
                 }, 300);
