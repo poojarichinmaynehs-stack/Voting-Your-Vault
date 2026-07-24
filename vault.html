@@ -14,16 +14,15 @@
             padding: 15px;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
         }
-              .option-btn {
+        .option-btn {
             padding: 10px 15px;
             font-size: 14px;
             margin: 8px auto;
-            width: 95%; /* Phone pe poori jagah lega */
-            display: block; /* Ek ke neeche ek aayega mast */
-            white-space: nowrap; /* Text ko tootne se rokega */
+            width: 95%; 
+            display: block; 
+            white-space: nowrap; 
             border-radius: 20px;
         }
-
         .year-tag {
             background: #ff9a9e;
             color: white;
@@ -63,12 +62,10 @@
         <!-- MAIN CONTENT AREA -->
         <div style="display: flex; gap: 20px; width: 100%; flex: 1;">
             
-            <!-- LEFT: Dynamic Folders with Admin Master Control -->
+            <!-- LEFT: Dynamic Folders -->
             <div class="gallery-section glass-panel">
                 <h2>Memories Vault 📸</h2>
-                <div class="album-grid" id="folderGrid">
-                    <!-- JavaScript handles secure rendering here -->
-                </div>
+                <div class="album-grid" id="folderGrid"></div>
             </div>
 
             <!-- RIGHT: Live Chat -->
@@ -134,37 +131,30 @@
         // --- ADMIN MULTI-USER MASTER CONTROL ---
         if (loggedInUser === "chinmay") {
             folderGrid.innerHTML = `
-                <!-- ADMIN MASTER SEARCH PANEL -->
                 <div class="album-card" style="text-align: left; border: 2px solid #ff9a9e; background: #fffafb;">
                     <div style="text-align: center;">
                         <div class="folder-icon">👑</div>
                         <h3>Admin Master Control</h3>
                         <p>Manage Any User's Vault</p>
                     </div>
-                    
                     <div style="margin-top: 15px;">
                         <input type="text" id="adminUserSearch" placeholder="Type name (e.g. suman, nathasha)" style="width: 100%; padding: 10px; border-radius: 12px; border: 1px solid #ff9a9e; outline: none; margin-bottom: 10px; font-size: 14px; text-align: center;">
-                        
                         <div style="display: flex; gap: 5px;">
-                            <button class="cute-btn" onclick="openAdminGallery()" style="flex: 1; padding: 8px; margin: 0; font-size: 12px;">📸 Gallery (Upload)</button>
+                            <button class="cute-btn" onclick="openAdminGallery()" style="flex: 1; padding: 8px; margin: 0; font-size: 12px;">📸 Gallery</button>
                             <button class="cute-btn" onclick="openAdminBday()" style="flex: 1; padding: 8px; margin: 0; font-size: 12px;">🎂 View Bdayweb</button>
                         </div>
                     </div>
                 </div>
-
-                <!-- FRIENDS OUTING (Common) -->
                 <div class="album-card" onclick="window.location.href='gallery.html?folder=friends'" style="display: flex; flex-direction: column; justify-content: center;">
                     <div class="folder-icon">🏕️</div>
                     <h3>Friends Outing</h3>
-                    <p>Shared Group Pics & Videos</p>
+                    <p>Shared Group Pics</p>
                 </div>
             `;
 
-            // Admin Actions
             window.openAdminGallery = () => {
                 const targetUser = document.getElementById("adminUserSearch").value.toLowerCase().trim();
                 if(!targetUser) { alert("Pehle dabe mein naam likh bhai!"); return; }
-                // Direct target user ki 2026 gallery open hogi
                 window.location.href = `gallery.html?folder=${targetUser}_2026`;
             };
 
@@ -172,31 +162,26 @@
                 const targetUser = document.getElementById("adminUserSearch").value.toLowerCase().trim();
                 if(!targetUser) { alert("Pehle dabe mein naam likh bhai!"); return; }
                 
-                // MAIN FIX YAHI PAR HAI ADMIN KE LIYE 👇
                 if(targetUser === "suman") {
                     window.location.href = "cutu26.html";
                 } else if(targetUser === "nathasha") {
-                    window.location.href = "Akkos26.html";
+                    window.location.href = "Akkos26.html"; // EXACT NAAM YAHAN FIX HAI
                 } else {
                     window.location.href = `birthday.html?folder=${targetUser}`;
                 }
             };
 
         } else {
-            
+            // NORMAL USER LOGIN
             let bdayPageLink = "birthday.html?folder=" + loggedInUser; 
             
-            // Special cases
             if(loggedInUser === "suman") { 
                 bdayPageLink = "cutu26.html"; 
             } else if(loggedInUser === "nathasha") {
-                // NORMAL LOGIN FIX YAHAN HAI 👇
-                bdayPageLink = "Akkos26.html";
+                bdayPageLink = "Akkos26.html"; // DUSRA EXACT NAAM YAHAN FIX HAI
             }
 
-
             folderGrid.innerHTML = `
-                <!-- USER'S OWN PRIVATE VAULT -->
                 <div class="album-card" style="text-align: left;">
                     <div style="text-align: center;">
                         <div class="folder-icon">🎂</div>
@@ -211,17 +196,14 @@
                         <button class="cute-btn option-btn" onclick="window.location.href='${bdayPageLink}'">🎂 My Bdayweb</button>
                     </div>
                 </div>
-
-                <!-- FRIENDS OUTING (Common) -->
                 <div class="album-card" onclick="window.location.href='gallery.html?folder=friends'" style="display: flex; flex-direction: column; justify-content: center;">
                     <div class="folder-icon">🏕️</div>
                     <h3>Friends Outing</h3>
-                    <p>Shared Group Pics & Videos</p>
+                    <p>Shared Group Pics</p>
                 </div>
             `;
         }
 
-        // LIVE CHAT
         const chatBox = document.getElementById("chatBox");
         const messageInput = document.getElementById("messageInput");
         const sendBtn = document.querySelector(".send-btn");
